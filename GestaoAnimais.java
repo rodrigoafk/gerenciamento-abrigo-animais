@@ -54,6 +54,28 @@ public class GestaoAnimais {
         return animaisDisponiveis;
     }
 
+    public static Animal buscarAnimalId(String id) {
+        for (Animal a : animais) {
+            if (a.getId().equals(id)) {
+                return a;
+            }
+        }
+        throw new IdNaoLocalizadoException("Não há nenhum animal cadastrado com o ID informado");
+    }
+
+    public static ArrayList<Animal> buscarAnimaisNome(String nome) {
+        ArrayList<Animal> animaisNome = new ArrayList<>();
+        boolean localizado = false;
+        for (Animal a : animais) {
+            if (a.getNome().toUpperCase().equals(nome.toUpperCase())) {
+                animaisNome.add(a);
+                localizado = true;
+            }
+        }
+        if (localizado) return animaisNome;
+        throw new NomeNaoLocalizadoException("Não há nenhum animal cadastrado com o nome informado");
+    }
+
     public static ArrayList<Animal> filtrarAnimaisPorRaca(String racaBuscada, ArrayList<Animal> listaFiltroAtual) {
         ArrayList<Animal> animaisDessaRaca = new ArrayList<>();
         for (Animal a : listaFiltroAtual) {

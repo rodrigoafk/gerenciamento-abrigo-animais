@@ -111,7 +111,48 @@ public class Menu {
         return filtroFaixaEtaria;
     }
 
+    public static void menuBuscarAnimais() {
+        int option = 0;
 
+        do {
+            System.out.println("=========== BUSCA ==============");
+            System.out.println("| Selecione uma opção:         |");
+            System.out.println("| 1 - Buscar por ID            |");
+            System.out.println("| 2 - Buscar por NOME          |");
+            System.out.println("================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option != 1 && option != 2);
+
+        if (option == 1) {
+            System.out.println("================================");
+            System.out.println("| Informe o ID:                |");
+            System.out.print("| => ");
+            String idBuscado = scanner.nextLine();
+
+            try {
+                ArrayList<Animal> listaAnimalId = new ArrayList<>();
+                listaAnimalId.add(GestaoAnimais.buscarAnimalId(idBuscado));
+                GestaoAnimais.imprimirAnimaisLista(listaAnimalId);
+            } catch (IdNaoLocalizadoException e) {
+                System.out.println(e.getMessage());
+                System.out.println("================================");
+            }
+        } else if (option == 2) {
+            System.out.println("================================");
+            System.out.println("| Informe o nome:              |");
+            System.out.print("| => ");
+            String nomeBuscado = scanner.nextLine();
+            try {
+                ArrayList<Animal> animaisNome = GestaoAnimais.buscarAnimaisNome(nomeBuscado);
+                GestaoAnimais.imprimirAnimaisLista(animaisNome);
+            } catch (NomeNaoLocalizadoException e) {
+                System.out.println(e.getMessage());
+                System.out.println("================================");
+            }
+        }
+    }
 
     public static void menuFiltrarAnimais() {
         boolean continuar;
