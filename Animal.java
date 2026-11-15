@@ -1,16 +1,23 @@
 
 
 public class Animal {
+
+    private static int contadorId = 1;
+    public static final int MESES_DO_ANO = 12;
+
+    private final String id;
     private String nome;
-    private String especie;
+    private Especie especie;
     private String raca;
-    private int idade;
+    private int idade; // em meses
     private Porte porte;
     private EstadoSaude estadoSaude;
     private Data dataResgate;
     private StatusAdocao statusAdocao;
 
-    public Animal(String nome, String especie, String raca, int idade, Porte porte, EstadoSaude estadoSaude, Data dataResgate, StatusAdocao statusAdocao) {
+    public Animal(String nome, Especie especie, String raca, int idade, Porte porte, EstadoSaude estadoSaude, Data dataResgate, StatusAdocao statusAdocao) {
+        this.id = String.valueOf(contadorId);
+        contadorId++;
         this.nome = nome;
         this.especie = especie;
         this.raca = raca;
@@ -18,14 +25,19 @@ public class Animal {
         this.porte = porte;
         this.estadoSaude = estadoSaude;
         this.dataResgate = dataResgate;
+        this.statusAdocao = statusAdocao;
         GestaoAnimais.addAnimal(this);
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public String getNome() {
         return this.nome;
     }
 
-    public String getEspecie() {
+    public Especie getEspecie() {
         return this.especie;
     }
 
@@ -36,6 +48,11 @@ public class Animal {
     public int getIdade() {
         return this.idade;
     }
+
+    public int getIdadeEmAnos() {
+        return (int) this.idade / MESES_DO_ANO;
+    }
+
     public Porte getPorte() {
         return this.porte;
     }
@@ -56,7 +73,7 @@ public class Animal {
         this.nome = nome;
     }
 
-    public void setEspecie(String especie) {
+    public void setEspecie(Especie especie) {
         this.especie = especie;
     }
 
