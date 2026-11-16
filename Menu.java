@@ -198,5 +198,131 @@ public class Menu {
 
     }
 
+    public static int menuEscolhaUsuario() {
+        int option = 0;
+        do {
+            System.out.println("=============== CADASTRO ===============");
+            System.out.println("| Selecione uma opção:                 |");
+            System.out.println("| 1 - Cadastrar como VOLUNTÁRIO        |");
+            System.out.println("| 2 - Cadastrar como VETERINÁRIO       |");
+            System.out.println("| 3 - Cadastrar como ADMINISTRADOR     |");
+            System.out.println("| 4 - Cadastrar como ADOTANTE          |");
+            System.out.println("========================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 || option > 4);
+        return option;
+    }
+
+    public static void menuCadastrarUsuario() {
+        int escolhaUsuario = menuEscolhaUsuario();
+        try {
+            System.out.print("Informe seu nome: ");
+            String nome = scanner.nextLine();
+            System.out.print("Informe seu CPF: ");
+            String cpf = scanner.nextLine();
+            GestaoUsuarios.cpfValido(cpf);
+            System.out.print("Informe seu email:");
+            String email = scanner.nextLine();
+            System.out.println("Data de Nascimento: ");
+            System.out.print("Dia: ");
+            int dia = scanner.nextInt();
+            System.out.print("Mês: ");
+            int mes = scanner.nextInt();
+            System.out.print("Ano: ");
+            int ano = scanner.nextInt();
+            scanner.nextLine();
+            Data dataNascimento = new Data(dia, mes, ano);
+            System.out.println("Crie uma senha: ");
+            String senha = scanner.nextLine();
+            GestaoUsuarios.senhaValida(senha);
+
+            switch (escolhaUsuario) {
+                case 1:
+                    Voluntario voluntario = new Voluntario(nome, cpf, email, dataNascimento, senha);
+                    GestaoUsuarios.cadastrarUsuario(voluntario);
+                    break;
+                case 2:
+                    Veterinario veterinario = new Veterinario(nome, cpf, email, dataNascimento, senha);
+                    GestaoUsuarios.cadastrarUsuario(veterinario);
+                    break;
+                case 3:
+                    AdministradorAbrigo administradorAbrigo = new AdministradorAbrigo(nome, cpf, email, dataNascimento, senha);
+                    GestaoUsuarios.cadastrarUsuario(administradorAbrigo);
+                    break;
+                case 4:
+                    Adotante adotante = new Adotante(nome, cpf, email, dataNascimento, senha);
+                    GestaoUsuarios.cadastrarUsuario(adotante);
+                    break;
+            }
+            System.out.println("Usuário cadastrado com sucessso!\n");
+        } catch (CPFInvalidoException e) {
+            System.out.println(e.getMessage());
+        } catch (UsuarioJaCadastradoException e) {
+            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (SenhaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static Usuario menuLoginUsuario() {
+
+        System.out.println("=============== LOGIN ===============");
+        System.out.print("| CPF: ");
+        String cpf = scanner.nextLine();
+        System.out.println("| SENHA: ");
+        String senha = scanner.nextLine();
+        System.out.println("=====================================\n");
+        try {
+            Usuario usuarioLogado = GestaoUsuarios.autenticarUsuario(cpf, senha);
+            System.out.println("Usuário autenticado com sucesso!");
+            return usuarioLogado;
+        } catch (CredenciaisInvalidasException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static void menuInicialUsuario() {
+        System.out.println("Seja bem vindo ao Sistema de Gerenciamento de Abrigos e Resgates de Animais!\n" +
+                "Uma plataforma que facilita o controle dos resgates, acompanhamento da saúde dos animais,\n" +
+                " gerenciamento de adoções e comunicação entre os responsáveis pelos abrigos e os voluntários.");
+        int option = 0;
+        boolean encerrar = false;
+        do {
+            do {
+                System.out.println("============ INÍCIO ============");
+                System.out.println("| Selecione uma opção:         |");
+                System.out.println("| 1 - Cadastrar usuário        |");
+                System.out.println("| 2 - Fazer login              |");
+                System.out.println("| 0 - Sair do sistema          |");
+                System.out.println("================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 2);
+            
+            switch (option) {
+                case 1:
+                    menuCadastrarUsuario();
+                    break;
+                case 2:
+                    Usuario usuarioLogado = menuLoginUsuario();
+                    if (usuarioLogado != null) {
+                        usuarioLogado.exibirMenu();
+                    }
+                    break;
+                case 0:
+                    encerrar = true;
+                    break;
+            }
+
+        } while (encerrar == false);
+    }
+
 
 }

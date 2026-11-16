@@ -1,17 +1,17 @@
+import java.util.ArrayList;
+
 public abstract class Usuario {
     private String nome;
     private String cpf;
     private String email;
     private Data dataNascimento;
-    private String login;
     private String senha;
 
-    public Usuario(String nome, String cpf, String email, Data dataNascimento, String login, String senha) {
+    public Usuario(String nome, String cpf, String email, Data dataNascimento, String senha) {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.dataNascimento = dataNascimento;
-        this.login = login;
         this.senha = senha;
     }
 
@@ -55,13 +55,7 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public abstract void exibirMenu();
+
+    public abstract ArrayList<Animal> getListaAnimaisVisiveis();
 }
