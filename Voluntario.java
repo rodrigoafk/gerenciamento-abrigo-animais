@@ -17,8 +17,17 @@ public class Voluntario extends Usuario {
         if (historicoParticipacoes.isEmpty()) throw new HistoricoParticipacoesVazioException("O histórico de participações do voluntário está vazio");
     }
 
+    public ArrayList<String> getHistoricoParticipacoes() {
+        ArrayList<String> copiaHistorico = new ArrayList<>();
+        for (String participacao : historicoParticipacoes) {
+            copiaHistorico.add(participacao);
+        }
+        return copiaHistorico;
+    }
+
     @Override
     public void exibirMenu() {
+        Menu.exibirMenuVoluntario(this);
 
     }
 

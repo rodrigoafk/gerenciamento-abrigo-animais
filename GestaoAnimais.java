@@ -16,6 +16,18 @@ public class GestaoAnimais {
         return copiaLista;
     }
 
+
+    public static String emitirRelatorioSaudeAnimais() {
+        int saudaveis = 0, emTratamento = 0, emTratamentoCritico = 0;
+        for (Animal animal : animais) {
+            EstadoSaude estado = animal.getEstadoSaude();
+            if (estado == EstadoSaude.SAUDAVEL) saudaveis++;
+            else if (estado == EstadoSaude.EM_TRATAMENTO) emTratamento++;
+            else if (estado == EstadoSaude.EM_TRATAMENTO_CRITICO) emTratamentoCritico++;
+        }
+        return String.format("Animais saudáveis: %d \nAnimais em tratamento: %d \nAnimais em tratamento crítico: %d\n", saudaveis, emTratamento, emTratamentoCritico);
+    }
+
     public static void imprimirAnimaisLista(ArrayList<Animal> lista) {
         int animalAtual = 0;
         for (Animal a : lista) {
@@ -39,8 +51,14 @@ public class GestaoAnimais {
         }
     }
 
-    public static void addAnimal(Animal animal) {
-        animais.add(animal);
+    public static void cadastrarAnimal(Usuario usuario, Animal animal) {
+        if (usuario instanceof AdministradorAbrigo) {
+            animais.add(animal);
+            return;
+        }
+
+        throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode cadastrar animais.");
+
     }
 
     public static ArrayList<Animal> animaisDisponiveis() {
@@ -54,8 +72,8 @@ public class GestaoAnimais {
         return animaisDisponiveis;
     }
 
-    public static Animal buscarAnimalId(String id) {
-        for (Animal a : animais) {
+    public static Animal buscarAnimalId(String id, ArrayList<Animal> animaisVisiveis) {
+        for (Animal a : animaisVisiveis) {
             if (a.getId().equals(id)) {
                 return a;
             }
@@ -63,10 +81,10 @@ public class GestaoAnimais {
         throw new IdNaoLocalizadoException("Não há nenhum animal cadastrado com o ID informado");
     }
 
-    public static ArrayList<Animal> buscarAnimaisNome(String nome) {
+    public static ArrayList<Animal> buscarAnimaisNome(String nome, ArrayList<Animal> animaisVisiveis) {
         ArrayList<Animal> animaisNome = new ArrayList<>();
         boolean localizado = false;
-        for (Animal a : animais) {
+        for (Animal a : animaisVisiveis) {
             if (a.getNome().toUpperCase().equals(nome.toUpperCase())) {
                 animaisNome.add(a);
                 localizado = true;

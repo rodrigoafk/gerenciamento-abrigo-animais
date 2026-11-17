@@ -8,7 +8,7 @@ public class Veterinario extends Usuario {
 
     @Override
     public void exibirMenu() {
-
+        Menu.exibirMenuVeterinario(this);
     }
 
     @Override

@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 public class Animal {
 
@@ -14,6 +14,7 @@ public class Animal {
     private EstadoSaude estadoSaude;
     private Data dataResgate;
     private StatusAdocao statusAdocao;
+    private ArrayList<RegistroMedico> historicoRegistrosMedicos;
 
     public Animal(String nome, Especie especie, String raca, int idade, Porte porte, EstadoSaude estadoSaude, Data dataResgate, StatusAdocao statusAdocao) {
         this.id = String.valueOf(contadorId);
@@ -26,7 +27,19 @@ public class Animal {
         this.estadoSaude = estadoSaude;
         this.dataResgate = dataResgate;
         this.statusAdocao = statusAdocao;
-        GestaoAnimais.addAnimal(this);
+        historicoRegistrosMedicos = new ArrayList<>();
+    }
+
+    public ArrayList<RegistroMedico> getHistoricoRegistrosMedicos() {
+        ArrayList<RegistroMedico> copiaHistorico = new ArrayList<>();
+        for (RegistroMedico registro : historicoRegistrosMedicos) {
+            copiaHistorico.add(registro);
+        }
+        return copiaHistorico;
+    }
+
+    public void adicionarRegistroMedico(RegistroMedico registro) {
+        this.historicoRegistrosMedicos.add(registro);
     }
 
     public String getId() {

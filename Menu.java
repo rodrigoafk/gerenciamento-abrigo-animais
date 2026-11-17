@@ -6,11 +6,43 @@ public class Menu {
     public static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Animal> listaFiltroAtual = new ArrayList<>();
 
+    public static Data lerData() {
+        System.out.print("Dia: ");
+        int dia = scanner.nextInt();
+        System.out.print("Mês: ");
+        int mes = scanner.nextInt();
+        System.out.print("Ano: ");
+        int ano = scanner.nextInt();
+        scanner.nextLine();
+        Data data = new Data(dia, mes, ano);
+        return data;
+    }
+
+    public static Animal selecionarAnimalPorId(ArrayList<Animal> listaVisivel) {
+        System.out.print("\nInforme o ID do animal: ");
+        String id = scanner.nextLine();
+
+        try {
+            Animal animal = GestaoAnimais.buscarAnimalId(id, listaVisivel);
+            return animal;
+        } catch (IdNaoLocalizadoException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public static boolean listaEstaVazia(ArrayList<Animal> lista) {
         if (lista == null || lista.isEmpty()) {
             return true;
         }
         return false;
+    }
+
+    public static void consultarHistoricoMedicoAnimal(ArrayList<Animal> animaisVisiveis) {
+        Animal animal = selecionarAnimalPorId(animaisVisiveis);
+        if (animal == null) return;
+        ArrayList<RegistroMedico> copiaHistorico = animal.getHistoricoRegistrosMedicos();
+        GestaoRegistrosMedicos.imprimirRegistrosLista(copiaHistorico);
     }
 
     public static boolean continuarFiltrando() {
@@ -111,7 +143,7 @@ public class Menu {
         return filtroFaixaEtaria;
     }
 
-    public static void menuBuscarAnimais() {
+    public static void menuBuscarAnimais(ArrayList<Animal> animaisVisiveis) {
         int option = 0;
 
         do {
@@ -133,7 +165,7 @@ public class Menu {
 
             try {
                 ArrayList<Animal> listaAnimalId = new ArrayList<>();
-                listaAnimalId.add(GestaoAnimais.buscarAnimalId(idBuscado));
+                listaAnimalId.add(GestaoAnimais.buscarAnimalId(idBuscado, animaisVisiveis));
                 GestaoAnimais.imprimirAnimaisLista(listaAnimalId);
             } catch (IdNaoLocalizadoException e) {
                 System.out.println(e.getMessage());
@@ -145,7 +177,7 @@ public class Menu {
             System.out.print("| => ");
             String nomeBuscado = scanner.nextLine();
             try {
-                ArrayList<Animal> animaisNome = GestaoAnimais.buscarAnimaisNome(nomeBuscado);
+                ArrayList<Animal> animaisNome = GestaoAnimais.buscarAnimaisNome(nomeBuscado, animaisVisiveis);
                 GestaoAnimais.imprimirAnimaisLista(animaisNome);
             } catch (NomeNaoLocalizadoException e) {
                 System.out.println(e.getMessage());
@@ -154,9 +186,125 @@ public class Menu {
         }
     }
 
-    public static void menuFiltrarAnimais() {
+    public static Especie menuEscolherEspecie() {
+        int option = 0;
+        do {
+            System.out.println("==================== ESPÉCIE ====================");
+            System.out.println("| Selecione uma opção:                          |");
+            System.out.println("| 1 - CACHORRO                                  |");
+            System.out.println("| 2 - GATO                                      |");
+            System.out.println("| 3 - ROEDOR                                    |");
+            System.out.println("| 4 - AVE                                       |");
+            System.out.println("=================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 || option > 4);
+
+        if (option == 1) return Especie.CACHORRO;
+        else if (option == 2) return Especie.GATO;
+        else if (option == 3) return Especie.ROEDOR;
+        else return Especie.AVE;
+    }
+
+    public static int menuCadastrarIdade() {
+        int option = 0;
+        do {
+            System.out.println("==================== IDADE ====================");
+            System.out.println("| Selecione uma opção:                        |");
+            System.out.println("| 1 - Informar em MESES                       |");
+            System.out.println("| 2 - Informar em ANOS                        |");
+            System.out.println("===============================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option != 1 && option != 2);
+
+        System.out.println("Idade: ");
+        int idade = scanner.nextInt();
+        scanner.nextLine();
+
+        if (option == 1) return idade;
+        else return (int) idade / Animal.MESES_DO_ANO;
+    }
+
+    public static Porte menuEscolherPorte() {
+        int option = 0;
+        do {
+            System.out.println("==================== PORTE ====================");
+            System.out.println("| Selecione uma opção:                        |");
+            System.out.println("| 1 - PEQUENO                                 |");
+            System.out.println("| 2 - MÉDIO                                   |");
+            System.out.println("| 3 - GRANDE                                  |");
+            System.out.println("===============================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 || option > 3);
+
+        if (option == 1) return Porte.PEQUENO;
+        else if (option == 2) return Porte.MEDIO;
+        else return Porte.GRANDE;
+    }
+
+    public static EstadoSaude menuEscolherEstadoSaude() {
+        int option = 0;
+        do {
+            System.out.println("=============== ESTADO DE SAÚDE ===============");
+            System.out.println("| Selecione uma opção:                        |");
+            System.out.println("| 1 - SAÚDAVEL                                |");
+            System.out.println("| 2 - EM TRATAMENTO                           |");
+            System.out.println("| 3 - EM TRATAMENTO CRÍTICO                   |");
+            System.out.println("===============================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 || option > 3);
+
+        if (option == 1) return EstadoSaude.SAUDAVEL;
+        else if (option == 2) return EstadoSaude.EM_TRATAMENTO;
+        else return EstadoSaude.EM_TRATAMENTO_CRITICO;
+    }
+
+    public static StatusAdocao menuEscolherStatusAdocao() {
+        int option = 0;
+        do {
+            System.out.println("================ STATUS DE ADOÇÃO ================");
+            System.out.println("| Selecione uma opção:                           |");
+            System.out.println("| 1 - DISPONÍVEL                                 |");
+            System.out.println("| 2 - ADOTADO                                    |");
+            System.out.println("==================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option != 1 && option != 2);
+
+        if (option == 1) return StatusAdocao.DISPONIVEL;
+        else return StatusAdocao.ADOTADO;
+    }
+
+    public static void menuCadastrarAnimal(AdministradorAbrigo administradorAbrigo) {
+        System.out.print("Nome do animal: ");
+        String nome = scanner.nextLine();
+        Especie especie = menuEscolherEspecie();
+        System.out.println("Raça do animal: ");
+        String raca = scanner.nextLine();
+        int idade = menuCadastrarIdade();
+        Porte porte = menuEscolherPorte();
+        EstadoSaude estadoSaude = menuEscolherEstadoSaude();
+        Data dataResgate = lerData();
+        StatusAdocao statusAdocao = menuEscolherStatusAdocao();
+        Animal animal = new Animal(nome, especie, raca, idade, porte, estadoSaude, dataResgate, statusAdocao);
+        try {
+            GestaoAnimais.cadastrarAnimal(administradorAbrigo, animal);
+        } catch (UsuarioNaoPossuiAutorizacaoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void menuFiltrarAnimais(ArrayList<Animal> animaisVisiveis) {
         boolean continuar;
-        listaFiltroAtual = GestaoAnimais.getTodosAnimais();
+        listaFiltroAtual = animaisVisiveis;
         do {
 
             continuar = false;
@@ -198,6 +346,161 @@ public class Menu {
 
     }
 
+    public static void menuGerenciarAnimais(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        do {
+            System.out.println("==================== GERENCIAR ANIMAIS ====================");
+            System.out.println("| Selecione uma opção:                                    |");
+            System.out.println("| 1 - Cadastrar animal resgatado                          |");
+            System.out.println("| 2 - Visualizar todos os animais                         |");
+            System.out.println("| 3 - Buscar animais                                      |");
+            System.out.println("| 4 - Filtrar animais                                     |");
+            System.out.println("| 5 - Editar animal                                       |");
+            System.out.println("| 6 - Remover animal                                      |");
+            System.out.println("| 0 - Voltar                                              |");
+            System.out.println("===========================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 0 || option > 6);
+
+        ArrayList<Animal> animaisVisiveis = administradorAbrigo.getListaAnimaisVisiveis();
+
+        switch (option) {
+            case 1:
+                menuCadastrarAnimal(administradorAbrigo);
+                break;
+            case 2:
+                GestaoAnimais.imprimirAnimaisLista(animaisVisiveis);
+                break;
+            case 3:
+                menuBuscarAnimais(animaisVisiveis);
+                break;
+            case 4:
+                menuFiltrarAnimais(animaisVisiveis);
+                break;
+            case 5:
+
+        }
+    }
+
+    public static void menuAtualizarSaudeAnimal(ArrayList<Animal> animaisVisiveis, Veterinario veterinario) {
+
+        Animal animal = selecionarAnimalPorId(animaisVisiveis);
+        if (animal == null) return;
+
+        int option = 0;
+        do {
+            System.out.println("=============== ATUALIZAR ESTADO DE SAÚDE ===============");
+            System.out.println("| Selecione uma opção:                                  |");
+            System.out.println("| 1 - Atualizar para 'SAÚDAVEL'                         |");
+            System.out.println("| 2 - Atualizar para 'EM TRATAMENTO'                    |");
+            System.out.println("| 3 - Atualizar para 'EM TRATAMENTO CRÍTICO'            |");
+            System.out.println("=========================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 || option > 3);
+
+        switch (option) {
+            case 1:
+                GestaoRegistrosMedicos.atualizarEstadoSaudeAnimal(animal, EstadoSaude.SAUDAVEL, veterinario);
+                break;
+            case 2:
+                GestaoRegistrosMedicos.atualizarEstadoSaudeAnimal(animal, EstadoSaude.EM_TRATAMENTO, veterinario);
+                break;
+            case 3:
+                GestaoRegistrosMedicos.atualizarEstadoSaudeAnimal(animal, EstadoSaude.EM_TRATAMENTO_CRITICO, veterinario);
+                break;
+        }
+    }
+
+
+
+    public static void menuRegistrarAtendimentoMedico(Veterinario veterinario) {
+        int option = 0;
+        do {
+            System.out.println("=============== ATENDIMENTO MÉDICO ===============");
+            System.out.println("| Selecione uma opção:                           |");
+            System.out.println("| 1 - Registrar uma VACINA                       |");
+            System.out.println("| 2 - Registrar uma CONSULTA MÉDICA              |");
+            System.out.println("| 3 - Registrar uma MEDICAÇÃO                    |");
+            System.out.println("| 4 - Registrar uma CIRURGIA                     |");
+            System.out.println("==================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 || option > 4);
+
+        Animal animal = selecionarAnimalPorId(veterinario.getListaAnimaisVisiveis());
+        if (animal == null) return;
+
+        switch (option) {
+            case 1:
+                try {
+                    System.out.println("Data de Aplicação: ");
+                    Data dataRealizacao = lerData();
+                    System.out.println("Data de Vencimento: ");
+                    Data dataVencimento = lerData();
+                    System.out.print("Descrição da vacina: ");
+                    String descricao = scanner.nextLine();
+                    GestaoRegistrosMedicos.registrarVacina(animal, veterinario, dataRealizacao, veterinario, descricao, dataVencimento);
+                    System.out.println("Registrado com sucesso!");
+                } catch (VacinaDuplicadaException e) {
+                    System.out.println(e.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Ocorreu um erro. Não foi possível concluir a operação.");
+                }
+                break;
+            case 2:
+                try {
+                    System.out.println("Data da Consulta: ");
+                    Data dataConsulta = lerData();
+                    System.out.print("Descrição: ");
+                    String descricao = scanner.nextLine();
+                    System.out.print("Diagnóstico: ");
+                    String diagnostico = scanner.nextLine();
+                    GestaoRegistrosMedicos.registrarConsulta(animal, veterinario, dataConsulta, veterinario, descricao, diagnostico);
+                    System.out.println("Registrado com sucesso!");
+                } catch (Exception e) {
+                    System.out.println("Ocorreu um erro. Não foi possível concluir a operação.");
+                }
+                break;
+            case 3:
+                try {
+                    System.out.println("Data da Medicação: ");
+                    Data dataMedicacao = lerData();
+                    System.out.print("Descrição: ");
+                    String descricao = scanner.nextLine();
+                    System.out.print("Dosagem: ");
+                    String dosagem = scanner.nextLine();
+                    System.out.print("Duração do tratamento (em dias): ");
+                    int duracao = scanner.nextInt();
+                    scanner.nextLine();
+                    GestaoRegistrosMedicos.registrarMedicamento(animal, veterinario, dataMedicacao, veterinario, descricao, dosagem, duracao);
+                    System.out.println("Registrado com sucesso!");
+                } catch (Exception e) {
+                    System.out.println("Ocorreu um erro. Não foi possível concluir a operação.");
+                }
+                break;
+
+            case 4:
+                try {
+                    System.out.println("Data da Cirurgia: ");
+                    Data dataCirurgia = lerData();
+                    System.out.print("Descrição: ");
+                    String descricao = scanner.nextLine();
+                    System.out.print("Cuidados no pós-operatório: ");
+                    String cuidados = scanner.nextLine();
+                    GestaoRegistrosMedicos.registrarCirurgia(animal, veterinario, dataCirurgia, veterinario, descricao, cuidados);
+                    System.out.println("Registrado com sucesso!");
+                } catch (Exception e) {
+                    System.out.println("Ocorreu um erro. Não foi possível concluir a operação.");
+                }
+                break;
+        }
+    }
+
     public static int menuEscolhaUsuario() {
         int option = 0;
         do {
@@ -226,14 +529,7 @@ public class Menu {
             System.out.print("Informe seu email:");
             String email = scanner.nextLine();
             System.out.println("Data de Nascimento: ");
-            System.out.print("Dia: ");
-            int dia = scanner.nextInt();
-            System.out.print("Mês: ");
-            int mes = scanner.nextInt();
-            System.out.print("Ano: ");
-            int ano = scanner.nextInt();
-            scanner.nextLine();
-            Data dataNascimento = new Data(dia, mes, ano);
+            Data dataNascimento = lerData();
             System.out.println("Crie uma senha: ");
             String senha = scanner.nextLine();
             GestaoUsuarios.senhaValida(senha);
@@ -305,7 +601,7 @@ public class Menu {
                 option = scanner.nextInt();
                 scanner.nextLine();
             } while (option < 0 || option > 2);
-            
+
             switch (option) {
                 case 1:
                     menuCadastrarUsuario();
@@ -324,5 +620,133 @@ public class Menu {
         } while (encerrar == false);
     }
 
+    public static void exibirMenuVoluntario(Voluntario voluntario) {
+        int option = 0;
+        do {
+
+            do {
+                System.out.println("==================== MENU PRINCIPAL ====================");
+                System.out.println("| Selecione uma opção:                                 |");
+                System.out.println("| 1 - Visualizar animais disponíveis para adoção       |");
+                System.out.println("| 2 - Buscar animais disponíveis                       |");
+                System.out.println("| 3 - Filtrar animais disponíveis                      |");
+                System.out.println("| 4 - Candidatar-se para atividades de apoio           |");
+                System.out.println("| 5 - Consultar histórico de participações na ONG      |");
+                System.out.println("| 6 - Acompanhar animais sob sua responsabilidade      |");
+                System.out.println("| 7 - Visualizar notificações                          |");
+                System.out.println("| 0 - Logout                                           |");
+                System.out.println("========================================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 7);
+
+            ArrayList<Animal> animaisVisiveis = voluntario.getListaAnimaisVisiveis();
+            switch (option) {
+                case 1:
+                    GestaoAnimais.imprimirAnimaisLista(animaisVisiveis);
+                    break;
+                case 2:
+                    menuBuscarAnimais(animaisVisiveis);
+                    break;
+                case 3:
+                    menuFiltrarAnimais(animaisVisiveis);
+                    break;
+                case 4:
+                    // a implementar
+                    break;
+                case 5:
+                    voluntario.historicoVazio();
+                    System.out.println("Histórico de participações: ");
+                    ArrayList<String> historico = voluntario.getHistoricoParticipacoes();
+                    for (String participacao : historico) {
+                        System.out.println(participacao);
+                    }
+                    break;
+            }
+
+        } while (option != 0);
+    }
+
+    public static void exibirMenuVeterinario(Veterinario veterinario) {
+        int option = 0;
+        do {
+            do {
+                System.out.println("==================== MENU PRINCIPAL ====================");
+                System.out.println("| Selecione uma opção:                                 |");
+                System.out.println("| 1 - Visualizar animais                               |");
+                System.out.println("| 2 - Buscar animais                                   |");
+                System.out.println("| 3 - Filtrar animais                                  |");
+                System.out.println("| 4 - Registrar atendimento médico                     |");
+                System.out.println("| 5 - Atualizar estado de saúde do animal              |");
+                System.out.println("| 6 - Consultar histórico medico de um animal          |");
+                System.out.println("| 7 - Emitir relatório de saúde                        |");
+                System.out.println("| 8 - Visualizar notificações                          |");
+                System.out.println("| 0 - Logout                                           |");
+                System.out.println("========================================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 8);
+
+            ArrayList<Animal> animaisVisiveis = veterinario.getListaAnimaisVisiveis();
+
+            switch (option) {
+                case 1:
+                    GestaoAnimais.imprimirAnimaisLista(animaisVisiveis);
+                    break;
+                case 2:
+                    menuBuscarAnimais(animaisVisiveis);
+                    break;
+                case 3:
+                    menuFiltrarAnimais(animaisVisiveis);
+                    break;
+                case 4:
+                    menuRegistrarAtendimentoMedico(veterinario);
+                    break;
+                case 5:
+                    menuAtualizarSaudeAnimal(animaisVisiveis, veterinario);
+                    break;
+                case 6:
+                    consultarHistoricoMedicoAnimal(animaisVisiveis);
+                    break;
+                case 7:
+                    System.out.println(GestaoAnimais.emitirRelatorioSaudeAnimais());
+                    break;
+                case 8:
+                    // notificações
+                    break;
+
+            }
+        } while (option != 0);
+
+
+    }
+
+    public static void exibirMenuAdministradorAbrigo(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        do {
+            do {
+                System.out.println("==================== MENU PRINCIPAL ====================");
+                System.out.println("| Selecione uma opção:                                 |");
+                System.out.println("| 1 - Gerenciar animais                                |");
+                System.out.println("| 2 - Gerenciar adoções                                |");
+                System.out.println("| 3 - Gerenciar usuários                               |");
+                System.out.println("| 4 - Agendar atividade                                |");
+                System.out.println("| 5 - Emitir relatórios e estáticas                    |");
+                System.out.println("| 6 - Enviar aviso geral                               |");
+                System.out.println("| 7 - Visualizar notificações                          |");
+                System.out.println("| 0 - Logout                                           |");
+                System.out.println("========================================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 7);
+
+            ArrayList<Animal> animaisVisiveis = administradorAbrigo.getListaAnimaisVisiveis();
+
+
+        } while (option != 0);
+    }
 
 }
