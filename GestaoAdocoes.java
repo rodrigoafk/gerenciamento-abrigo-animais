@@ -14,7 +14,43 @@ public class GestaoAdocoes {
         solicitacoes.add(solicitacao);
     }
 
-    public static void avaliarSolicitacao(Usuario usuario, SolicitacaoAdocao solicitacaoAdocao, boolean aprovada) {
+    public static SolicitacaoAdocao getSolicitacaoPorId(String id, Usuario usuario) {
+        if (usuario instanceof AdministradorAbrigo) {
+            for (SolicitacaoAdocao soli : solicitacoes) {
+                if (soli.getId().equals(id)) {
+                    return soli;
+                }
+            }
+            throw new SolicitacaoNaoEncontradaException("Erro: Não foi encontrada nenhuma solicitação de adoção com o ID informado");
+        } else {
+            throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode analisar solicitações de adoção.");
+        }
+
+    }
+
+    public static ArrayList<SolicitacaoAdocao> getSolicitacoesPendentes(Usuario usuario) {
+        ArrayList<SolicitacaoAdocao> copiaSolicitacoes  = new ArrayList<>();
+        if (usuario instanceof AdministradorAbrigo) {
+            for (SolicitacaoAdocao solicitacao : solicitacoes) {
+                if (solicitacao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE) {
+                    copiaSolicitacoes.add(solicitacao);
+                }
+            }
+            if (copiaSolicitacoes.isEmpty()) {
+                throw new NaoHaSolicitacoesPendentesException("Não há solicitações de adoção pendentes de aprovação no momento.");
+            }
+            return copiaSolicitacoes;
+        } else {
+            throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode analisar solicitações de adoção.");
+        }
+    }
+
+    public static void avaliarSolicitacao(Usuario usuario, String idSolicitacao, boolean aprovada) {
+        SolicitacaoAdocao solicitacaoAdocao = getSolicitacaoPorId(idSolicitacao, usuario);
+        if (solicitacaoAdocao.getStatusSolicitacao() != StatusSolicitacao.PENDENTE) {
+            throw new SolicitacaoJaAvaliadaException("Erro: Essa solicitação de adoção já foi avaliada.");
+        }
+
         if (usuario instanceof AdministradorAbrigo) {
             if (aprovada == true) {
                 solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.APROVADA);
@@ -29,19 +65,27 @@ public class GestaoAdocoes {
     }
 
     public static void registrarDevolucao(Usuario usuario, SolicitacaoAdocao solicitacaoAdocao, String motivo)  {
-        if (usuario instanceof AdministradorAbrigo) {
-            solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.DEVOLVIDA);
-            solicitacaoAdocao.setObservacoes(motivo);
-            solicitacaoAdocao.getAnimal().setStatusAdocao(StatusAdocao.DISPONIVEL);
+        if (solicitacaoAdocao.getStatusSolicitacao() == StatusSolicitacao.APROVADA) {
+            if (usuario instanceof AdministradorAbrigo) {
+                solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.DEVOLVIDA);
+                solicitacaoAdocao.setObservacoes(motivo);
+                solicitacaoAdocao.getAnimal().setStatusAdocao(StatusAdocao.DISPONIVEL);
+            } else {
+                throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode registrar devoluções.");
+            }
         } else {
-            throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode registrar devoluções.");
+            throw new SolicitacaoNaoFoiAprovadaException("Erro: Devoluções só podem ser registradas em solicitações que foram aprovadas previamente.");
         }
 
     }
 
-    public static void imprimirSolicitacoes() {
-        for (SolicitacaoAdocao solicitacao : solicitacoes) {
-            System.out.println(solicitacao.getResumo());
+    public static void imprimirSolicitacoes(Usuario usuario) {
+        if (usuario instanceof AdministradorAbrigo) {
+            for (SolicitacaoAdocao solicitacao : solicitacoes) {
+                System.out.println(solicitacao.getResumo());
+            }
+        } else {
+            throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode analisar solicitações de adoção.");
         }
     }
 

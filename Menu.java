@@ -590,8 +590,63 @@ public class Menu {
         Data dataSolicitacao = lerData();
         try {
             GestaoAdocoes.solicitarAdocao(adotante, animal, dataSolicitacao);
+            System.out.println("Solicitação de adoção registrada com sucesso!");
         } catch (AnimalIndisponivelException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static void menuAvaliarSolicitacaoPorId(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        System.out.print("Informe o ID da solicitação: ");
+        String id = scanner.nextLine();
+        SolicitacaoAdocao solicitacaoAdocao = GestaoAdocoes.getSolicitacaoPorId(id, administradorAbrigo);
+        System.out.println(solicitacaoAdocao.getResumo());
+        do {
+            System.out.println("==================== AVALIAR SOLICITAÇÃO =====================");
+            System.out.println("| Selecione uma opção:                                       |");
+            System.out.println("| 1 - APROVAR                                                |");
+            System.out.println("| 2 - REJEITAR                                               |");
+            System.out.println("==============================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+
+        } while (option != 1 && option != 2);
+
+        if (option == 1) {
+            GestaoAdocoes.avaliarSolicitacao(administradorAbrigo, id, true);
+        } else {
+            GestaoAdocoes.avaliarSolicitacao(administradorAbrigo, id, false);
+        }
+        System.out.println("Solicitação avaliada com sucesso!");
+    }
+
+    public static void menuRegistrarDevolucao(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        System.out.print("Informe o ID da solicitação: ");
+        String id = scanner.nextLine();
+        SolicitacaoAdocao solicitacaoAdocao = GestaoAdocoes.getSolicitacaoPorId(id, administradorAbrigo);
+        System.out.println(solicitacaoAdocao.getResumo());
+        System.out.print("Motivo da devolução: ");
+        String observacao = scanner.nextLine();
+        do {
+            System.out.println("==================== REGISTRAR DEVOLUÇÃO =====================");
+            System.out.println("| Selecione uma opção:                                       |");
+            System.out.println("| 1 - SIM                                                    |");
+            System.out.println("| 2 - NÃO                                                    |");
+            System.out.println("==============================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+
+        } while (option != 1 && option != 2);
+
+        if (option == 1) {
+            GestaoAdocoes.registrarDevolucao(administradorAbrigo, solicitacaoAdocao, observacao);
+            System.out.println("Devolução registrada com sucesso!");
+        } else {
+            System.out.println("Operação cancelada!");
         }
     }
 
@@ -677,6 +732,59 @@ public class Menu {
                 }
                 break;
         }
+    }
+
+    public static void menuGerenciarAdocoes(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        do {
+
+            do {
+                System.out.println("==================== GERENCIAR ADOÇÕES ====================");
+                System.out.println("| Selecione uma opção:                                    |");
+                System.out.println("| 1 - Listar todo o histórico de solicitações de adoção   |");
+                System.out.println("| 2 - Listar as solicitações de adoção pendentes          |");
+                System.out.println("| 3 - Avaliar uma solicitação                             |");
+                System.out.println("| 4 - Registrar a devolução de um animal                  |");
+                System.out.println("| 0 - Voltar                                              |");
+                System.out.println("===========================================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 4);
+
+            try {
+                switch (option) {
+                    case 1:
+                        GestaoAdocoes.imprimirSolicitacoes(administradorAbrigo);
+                        break;
+                    case 2:
+                        ArrayList<SolicitacaoAdocao> pendentes = GestaoAdocoes.getSolicitacoesPendentes(administradorAbrigo);
+                        for (SolicitacaoAdocao solicitacao : pendentes) {
+                            System.out.println(solicitacao.getResumo());
+                        }
+                        break;
+                    case 3:
+                        menuAvaliarSolicitacaoPorId(administradorAbrigo);
+                        break;
+                    case 4:
+                        menuRegistrarDevolucao(administradorAbrigo);
+                        break;
+                }
+            } catch (UsuarioNaoPossuiAutorizacaoException e) {
+                System.out.println(e.getMessage());
+            } catch (SolicitacaoJaAvaliadaException e) {
+                System.out.println(e.getMessage());
+            } catch (SolicitacaoNaoEncontradaException e) {
+                System.out.println(e.getMessage());
+            } catch (NaoHaSolicitacoesPendentesException e) {
+                System.out.println(e.getMessage());
+            } catch (SolicitacaoNaoFoiAprovadaException e) {
+                System.out.println(e.getMessage());
+            } catch (RuntimeException e) {
+                System.out.println("Ocorreu um erro desconhecido.");
+            }
+
+        } while ((option != 0));
     }
 
     public static int menuEscolhaUsuario() {
@@ -943,6 +1051,7 @@ public class Menu {
         } while (option != 0);
 
     }
+
     public static void exibirMenuAdministradorAbrigo(AdministradorAbrigo administradorAbrigo) {
         int option = 0;
         do {
@@ -968,6 +1077,9 @@ public class Menu {
             switch (option) {
                 case 1:
                     menuGerenciarAnimais(administradorAbrigo);
+                    break;
+                case 2:
+                    menuGerenciarAdocoes(administradorAbrigo);
                     break;
                 case 3:
                     menuGerenciarUsuarios(administradorAbrigo);
