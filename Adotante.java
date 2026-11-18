@@ -7,7 +7,7 @@ public class Adotante extends Usuario {
 
     @Override
     public void exibirMenu() {
-
+        Menu.exibirMenuAdotante(this);
     }
 
     @Override

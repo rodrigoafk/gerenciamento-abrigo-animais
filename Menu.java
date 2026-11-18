@@ -564,7 +564,36 @@ public class Menu {
         }
     }
 
+    public static void menuSolicitarAdocao(ArrayList<Animal> animaisVisiveis, Adotante adotante) {
+        int option = 0;
+        Animal animal;
+        do {
+            animal = selecionarAnimalPorId(animaisVisiveis);
+            if (animal == null) return;
+            ArrayList<Animal> lista = new ArrayList<>();
+            lista.add(animal);
+            GestaoAnimais.imprimirAnimaisLista(lista);
+            do {
+                System.out.println("====================== CONFIRMAR ESCOLHA DE ANIMAL ======================");
+                System.out.println("| Deseja prosseguir com a solicitação de adoção do animal encontrado?   |");
+                System.out.println("| Selecione uma opção:                                                  |");
+                System.out.println("| 1 - SIM                                                               |");
+                System.out.println("| 2 - NÃO                                                               |");
+                System.out.println("=========================================================================");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option != 1 && option != 2);
 
+        } while (option != 1);
+
+        System.out.println("Data da solicitação: ");
+        Data dataSolicitacao = lerData();
+        try {
+            GestaoAdocoes.solicitarAdocao(adotante, animal, dataSolicitacao);
+        } catch (AnimalIndisponivelException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public static void menuRegistrarAtendimentoMedico(Veterinario veterinario) {
         int option = 0;
@@ -872,6 +901,48 @@ public class Menu {
 
     }
 
+    public static void exibirMenuAdotante(Adotante adotante) {
+        int option = 0;
+        do {
+            do {
+                System.out.println("==================== MENU PRINCIPAL ====================");
+                System.out.println("| Selecione uma opção:                                 |");
+                System.out.println("| 1 - Visualizar animais disponíveis                   |");
+                System.out.println("| 2 - Buscar animais disponíveis                       |");
+                System.out.println("| 3 - Filtrar animais disponíveis                      |");
+                System.out.println("| 4 - Solicitar adoção                                 |");
+                System.out.println("| 5 - Acompanhar minhas solicitações                   |");
+                System.out.println("| 0 - Logout                                           |");
+                System.out.println("========================================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 5);
+
+            ArrayList<Animal> animaisVisiveis = adotante.getListaAnimaisVisiveis();
+
+            switch (option) {
+                case 1:
+                    GestaoAnimais.imprimirAnimaisLista(animaisVisiveis);
+                    break;
+                case 2:
+                    menuBuscarAnimais(animaisVisiveis);
+                    break;
+                case 3:
+                    menuFiltrarAnimais(animaisVisiveis);
+                    break;
+                case 4:
+                    menuSolicitarAdocao(animaisVisiveis, adotante);
+                    break;
+                case 5:
+                    GestaoAdocoes.verificarAdocoesCpf(adotante);
+                    break;
+
+            }
+
+        } while (option != 0);
+
+    }
     public static void exibirMenuAdministradorAbrigo(AdministradorAbrigo administradorAbrigo) {
         int option = 0;
         do {
