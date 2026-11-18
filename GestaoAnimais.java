@@ -17,6 +17,21 @@ public class GestaoAnimais {
     }
 
 
+
+
+    public static void removerAnimal(Animal animal) {
+        if (animal.getStatusAdocao() == StatusAdocao.ADOTADO) {
+            throw new AnimalNaoPodeSerRemovidoException("Erro: Animais que já foram adotados não podem ser deletados do sistema");
+        }
+
+        for (Animal a : animais) {
+            if (a.getId().equals(animal.getId())) {
+                animais.remove(a);
+                return;
+            }
+        }
+    }
+
     public static String emitirRelatorioSaudeAnimais() {
         int saudaveis = 0, emTratamento = 0, emTratamentoCritico = 0;
         for (Animal animal : animais) {

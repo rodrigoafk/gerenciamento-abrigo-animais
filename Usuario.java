@@ -58,4 +58,8 @@ public abstract class Usuario {
     public abstract void exibirMenu();
 
     public abstract ArrayList<Animal> getListaAnimaisVisiveis();
+
+    public String getResumo() {
+        return String.format("NOME: %s\nCPF: %s\nEMAIL: %s\n", getNome().toUpperCase(), getCpf(), getEmail());
+    }
 }

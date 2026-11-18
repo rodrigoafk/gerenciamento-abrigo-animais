@@ -225,7 +225,13 @@ public class Menu {
         scanner.nextLine();
 
         if (option == 1) return idade;
-        else return (int) idade / Animal.MESES_DO_ANO;
+        else return idade * Animal.MESES_DO_ANO;
+    }
+
+    public static String lerUmCpf() {
+        System.out.println("Informe o CPF do usuário buscado: ");
+        String cpf = scanner.nextLine();
+        return cpf;
     }
 
     public static Porte menuEscolherPorte() {
@@ -346,6 +352,145 @@ public class Menu {
 
     }
 
+    public static void menuEditarDadosAnimal(AdministradorAbrigo administradorAbrigo, ArrayList<Animal> animaisVisiveis) {
+        Animal animal = selecionarAnimalPorId(animaisVisiveis);
+        if (animal == null) return;
+
+        int option = 0;
+        do {
+            System.out.println("==================== EDITAR DADOS DO ANIMAL ====================");
+            System.out.println("| Selecione uma opção:                                         |");
+            System.out.println("| 1 - Editar NOME                                              |");
+            System.out.println("| 2 - Editar RAÇA                                              |");
+            System.out.println("| 3 - Editar PORTE                                             |");
+            System.out.println("| 4 - Editar STATUS DE ADOÇÃO                                  |");
+            System.out.println("| 0 - Voltar                                                   |");
+            System.out.println("================================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 0 || option > 4);
+
+        if (option == 0) return;
+
+        if (option == 1) {
+            System.out.print("Informe o nome do animal: ");
+            String nome = scanner.nextLine();
+            animal.setNome(nome);
+        } else if (option == 2) {
+            System.out.print("Informe a raça do animal: ");
+            String raca = scanner.nextLine();
+            animal.setRaca(raca);
+        } else if (option == 3) {
+            Porte porte = menuEscolherPorte();
+            animal.setPorte(porte);
+        } else if (option == 4) {
+            StatusAdocao statusAdocao = menuEscolherStatusAdocao();
+            animal.setStatusAdocao(statusAdocao);
+        }
+        System.out.println("Dado atualizado com sucesso!");
+    }
+
+    public static void menuRemoverAnimal(AdministradorAbrigo administradorAbrigo, ArrayList<Animal> animaisVisiveis) {
+        Animal animal = selecionarAnimalPorId(animaisVisiveis);
+        if (animal == null) return;
+
+
+        int option = 0;
+        do {
+            System.out.println("==================== REMOVER ANIMAL ====================");
+            System.out.println("| Essa ação não poderá ser desfeita, deseja continuar? |");
+            System.out.println("| Selecione uma opção:                                 |");
+            System.out.println("| 1 - SIM                                              |");
+            System.out.println("| 2 - NÃO                                              |");
+            System.out.println("========================================================");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option != 1 && option != 2);
+
+        if (option == 1) {
+            try {
+                GestaoAnimais.removerAnimal(animal);
+                System.out.println("Operação concluída com sucesso!");
+            } catch (AnimalNaoPodeSerRemovidoException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Operação cancelada com sucesso!");
+        }
+
+    }
+
+    public static void menuGerenciarUsuarios(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        do {
+            System.out.println("==================== GERENCIAR USUÁRIOS ====================");
+            System.out.println("| Selecione uma opção:                                    |");
+            System.out.println("| 1 - Listar todos os usuários disponíveis                |");
+            System.out.println("| 2 - Buscar um usuário pelo CPF                         |");
+            System.out.println("| 3 - Remover um usuário do sistema                       |");
+            System.out.println("| 0 - Voltar                                              |");
+            System.out.println("===========================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 0 || option > 3);
+
+        ArrayList<Animal> animaisVisiveis = administradorAbrigo.getListaAnimaisVisiveis();
+
+        switch (option) {
+            case 1:
+                GestaoUsuarios.imprimirTodosUsuarios();
+                break;
+            case 2:
+                try {
+                    String cpf = lerUmCpf();
+                    GestaoUsuarios.imprimirUmUsuario(cpf);
+                } catch (UsuarioNaoEncontradoException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case 3:
+                menuRemoverUsuario(administradorAbrigo.getCpf());
+                break;
+        }
+    }
+
+    public static void menuRemoverUsuario(String cpfAdministrador) {
+        String cpf = lerUmCpf();
+
+        Usuario usu = null;
+        try {
+            usu = GestaoUsuarios.imprimirUmUsuario(cpf);
+        } catch (UsuarioNaoEncontradoException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        int option = 0;
+        do {
+            System.out.println("==================== REMOVER USUÁRIO ====================");
+            System.out.println("| Essa ação não poderá ser desfeita, deseja continuar?  |");
+            System.out.println("| Selecione uma opção:                                  |");
+            System.out.println("| 1 - SIM                                               |");
+            System.out.println("| 2 - NÃO                                               |");
+            System.out.println("=========================================================");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option != 1 && option != 2);
+
+        if (option == 1) {
+            try {
+                GestaoUsuarios.removerUsuario(usu, cpfAdministrador);
+                System.out.println("Operação concluída com sucesso!");
+            } catch (UsuarioNaoPodeSerDeletadoException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Operação cancelada com sucesso!");
+        }
+    }
+
     public static void menuGerenciarAnimais(AdministradorAbrigo administradorAbrigo) {
         int option = 0;
         do {
@@ -380,7 +525,11 @@ public class Menu {
                 menuFiltrarAnimais(animaisVisiveis);
                 break;
             case 5:
-
+                menuEditarDadosAnimal(administradorAbrigo, animaisVisiveis);
+                break;
+            case 6:
+                menuRemoverAnimal(administradorAbrigo, animaisVisiveis);
+                break;
         }
     }
 
@@ -744,6 +893,15 @@ public class Menu {
             } while (option < 0 || option > 7);
 
             ArrayList<Animal> animaisVisiveis = administradorAbrigo.getListaAnimaisVisiveis();
+
+            switch (option) {
+                case 1:
+                    menuGerenciarAnimais(administradorAbrigo);
+                    break;
+                case 3:
+                    menuGerenciarUsuarios(administradorAbrigo);
+                    break;
+            }
 
 
         } while (option != 0);

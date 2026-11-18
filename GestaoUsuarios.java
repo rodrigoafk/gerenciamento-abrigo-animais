@@ -29,12 +29,51 @@ public class GestaoUsuarios {
 
     }
 
-    public static boolean usuarioJaCadastrado(String cpf) {
-        boolean cpfJaExiste = false;
+    public static Usuario retornarUsuario(String cpf) {
         for (Usuario usu : usuarios) {
-            if (cpf.equals(usu.getCpf())) cpfJaExiste = true;
+            if (usu.getCpf().equals(cpf)) return usu;
         }
-        return cpfJaExiste;
+        return null;
+    }
+
+    public static void removerUsuario(Usuario usuario, String cpfAdministrador) {
+        if (usuario.getCpf().equals(cpfAdministrador)) {
+            throw new UsuarioNaoPodeSerDeletadoException("Erro: Um administrador não pode deletar ele mesmo do sistema.");
+        }
+
+        usuarios.remove(usuario);
+    }
+
+    public static Usuario imprimirUmUsuario(String cpf) {
+        Usuario usu = retornarUsuario(cpf);
+        if (usu == null) {
+            throw new UsuarioNaoEncontradoException("Erro: Não foi localizado nenhum usuário com essas credenciais.");
+        }
+
+        System.out.print("================= USUÁRIO =================\n");
+        System.out.println(usu.getResumo());
+        System.out.println("==========================================\n");
+
+        return usu;
+
+    }
+
+    public static void imprimirTodosUsuarios() {
+        int ordemUsuarios = 0;
+        for (Usuario usu : usuarios) {
+            ordemUsuarios++;
+            System.out.printf("================= USUÁRIO %d =================\n", ordemUsuarios);
+            System.out.println(usu.getResumo());
+            System.out.println("=============================================\n");
+        }
+    }
+
+
+    public static boolean usuarioJaCadastrado(String cpf) {
+        for (Usuario usu : usuarios) {
+            if (cpf.equals(usu.getCpf())) return true;
+        }
+        return false;
     }
 
     public static void senhaValida(String senha) {
@@ -61,15 +100,14 @@ public class GestaoUsuarios {
 
     public static Usuario autenticarUsuario(String cpf, String senha) {
 
-        if (usuarioJaCadastrado(cpf)) {
-            for (Usuario usu : usuarios) {
-                if (cpf.equals(usu.getCpf())) {
-                    if (senha.equals(usu.getSenha())) {
-                        return usu;
-                    }
+        for (Usuario usu : usuarios) {
+            if (cpf.equals(usu.getCpf())) {
+                if (senha.equals(usu.getSenha())) {
+                    return usu;
                 }
             }
         }
+
         throw new CredenciaisInvalidasException("Erro: Credenciais inválidas. O login falhou");
     }
 }
