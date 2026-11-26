@@ -14,6 +14,16 @@ public class GestaoAdocoes {
         solicitacoes.add(solicitacao);
     }
 
+    public static String emitirRelatorioQuantidadeAdocoes() {
+        int quantidade = 0;
+        for (SolicitacaoAdocao solicitacaoAdocao : solicitacoes) {
+            if (solicitacaoAdocao.getStatusSolicitacao() == StatusSolicitacao.APROVADA) {
+                quantidade++;
+            }
+        }
+        return String.format("Total de adoções realizadas: %d\n", quantidade);
+    }
+
     public static SolicitacaoAdocao getSolicitacaoPorId(String id, Usuario usuario) {
         if (usuario instanceof AdministradorAbrigo) {
             for (SolicitacaoAdocao soli : solicitacoes) {
@@ -54,6 +64,7 @@ public class GestaoAdocoes {
         if (usuario instanceof AdministradorAbrigo) {
             if (aprovada == true) {
                 solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.APROVADA);
+                rejeitarSolicitacoesMesmoAnimal(usuario, solicitacaoAdocao.getAnimal());
                 solicitacaoAdocao.getAnimal().setStatusAdocao(StatusAdocao.ADOTADO);
             } else {
                 solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.REJEITADA);
@@ -95,6 +106,17 @@ public class GestaoAdocoes {
             if (solicitacaoAdocao.getAdotante().getCpf().equals(cpfUsuario)) {
                 System.out.println(solicitacaoAdocao.getResumo());
                 System.out.println("========================================\n");
+            }
+        }
+    }
+
+    public static void rejeitarSolicitacoesMesmoAnimal(Usuario usuario, Animal animal) {
+        if (!(usuario instanceof AdministradorAbrigo)) {
+            throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode avaliar solicitações de adoção.");
+        }
+        for (SolicitacaoAdocao solicitacaoAdocao : solicitacoes) {
+            if (solicitacaoAdocao.getAnimal().getId().equals(animal.getId()) && solicitacaoAdocao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE) {
+                solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.REJEITADA);
             }
         }
     }

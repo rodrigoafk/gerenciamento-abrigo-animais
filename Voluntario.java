@@ -2,15 +2,18 @@ import java.util.ArrayList;
 
 public class Voluntario extends Usuario {
 
-    private ArrayList<String> historicoParticipacoes;
+
+    private ArrayList<Atividade> historicoParticipacoes;
+    private ArrayList<Animal> animaisAcompanhados;
 
     public Voluntario(String nome, String cpf, String email, Data dataNascimento, String senha) {
         super(nome, cpf, email, dataNascimento, senha);
         historicoParticipacoes = new ArrayList<>();
+        animaisAcompanhados = new ArrayList<>();
     }
 
-    public void adicionarParticipacao(String participacao) {
-        this.historicoParticipacoes.add(participacao);
+    public void adicionarParticipacao(Atividade atividade) {
+        this.historicoParticipacoes.add(atividade);
     }
 
     public void historicoVazio() {
@@ -19,8 +22,8 @@ public class Voluntario extends Usuario {
 
     public ArrayList<String> getHistoricoParticipacoes() {
         ArrayList<String> copiaHistorico = new ArrayList<>();
-        for (String participacao : historicoParticipacoes) {
-            copiaHistorico.add(participacao);
+        for (Atividade atividade : historicoParticipacoes) {
+            copiaHistorico.add(atividade.getResumo());
         }
         return copiaHistorico;
     }
@@ -35,4 +38,24 @@ public class Voluntario extends Usuario {
     public ArrayList<Animal> getListaAnimaisVisiveis() {
         return GestaoAnimais.animaisDisponiveis();
     }
+
+    public void acompanharAnimal(Animal animal) {
+        if (animal.isAcompanhado()) {
+            throw new AnimalIndisponivelException("Erro: O animal já está sendo acompanhado no momento.");
+        }
+        animal.setAcompanhado(true);
+        animaisAcompanhados.add(animal);
+    }
+
+    public ArrayList<Animal> getAnimaisAcompanhados() {
+        ArrayList<Animal> copia = new ArrayList<>();
+        for (Animal animal : animaisAcompanhados) {
+            copia.add(animal);
+        }
+        return copia;
+    }
+
+
+
+
 }

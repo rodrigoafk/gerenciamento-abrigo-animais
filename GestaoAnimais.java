@@ -32,6 +32,24 @@ public class GestaoAnimais {
         }
     }
 
+    public static String emitirRelatorioEspeciesResgatadas() {
+        int cachorros = 0, gatos = 0, roedores = 0, aves = 0;
+
+        for (Animal animal : animais) {
+            if (animal.getEspecie() == Especie.CACHORRO) cachorros++;
+            else if (animal.getEspecie() == Especie.GATO) gatos++;
+            else if (animal.getEspecie() == Especie.ROEDOR) roedores++;
+            else if (animal.getEspecie() == Especie.AVE) aves++;
+        }
+
+        return String.format("Quantidade de animais resgatados por espécie: \nQuantidade de cachorros resgatados: %d\nQuantidade de gatos resgatados: %d\nQuantidade de roedores resgatados: %d\nQuantidade de aves resgatadas: %d\n", cachorros, gatos, roedores, aves);
+    }
+
+    public static String emitirRelatorioTotalAnimaisResgatados() {
+        int quantidade = animais.size();
+        return String.format("Total de animais resgatados pelo abrigo: %d\n", quantidade);
+    }
+
     public static String emitirRelatorioSaudeAnimais() {
         int saudaveis = 0, emTratamento = 0, emTratamentoCritico = 0;
         for (Animal animal : animais) {
@@ -146,6 +164,17 @@ public class GestaoAnimais {
             if (a.getPorte() == porte) animaisPorte.add(a);
         }
         return animaisPorte;
+    }
+
+
+    public static ArrayList<Animal> getAnimaisDesacompanhados() {
+        ArrayList<Animal> desacompanhados = new ArrayList<>();
+        for (Animal animal : animaisDisponiveis()) {
+            if (animal.isAcompanhado() == false) {
+                desacompanhados.add(animal);
+            }
+        }
+        return desacompanhados;
     }
 
 

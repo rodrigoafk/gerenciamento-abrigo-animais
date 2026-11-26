@@ -7,6 +7,16 @@ public class GestaoUsuarios {
 
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
 
+    public static String emitirRelatorioVoluntariosAtivos() {
+        int voluntarios = 0;
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof Voluntario) {
+                voluntarios++;
+            }
+        }
+        return String.format("Total de voluntários ativos cadastrados no sistema: %d\n", voluntarios);
+    }
+
     public static void cpfValido(String cpf) {
         int tamanhoCpf = cpf.length();
         if (tamanhoCpf != NUMERO_DIGITOS_CPF) {
@@ -110,4 +120,6 @@ public class GestaoUsuarios {
 
         throw new CredenciaisInvalidasException("Erro: Credenciais inválidas. O login falhou");
     }
+
+
 }

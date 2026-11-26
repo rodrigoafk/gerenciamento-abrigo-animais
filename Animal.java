@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Animal {
 
-    private static int contadorId = 1;
+    private static int contadorId = 0;
     public static final int MESES_DO_ANO = 12;
 
     private final String id;
@@ -14,11 +14,12 @@ public class Animal {
     private EstadoSaude estadoSaude;
     private Data dataResgate;
     private StatusAdocao statusAdocao;
+    private boolean acompanhado;
     private ArrayList<RegistroMedico> historicoRegistrosMedicos;
 
     public Animal(String nome, Especie especie, String raca, int idade, Porte porte, EstadoSaude estadoSaude, Data dataResgate, StatusAdocao statusAdocao) {
-        this.id = String.valueOf(contadorId);
         contadorId++;
+        this.id = String.valueOf(contadorId);
         this.nome = nome;
         this.especie = especie;
         this.raca = raca;
@@ -27,6 +28,7 @@ public class Animal {
         this.estadoSaude = estadoSaude;
         this.dataResgate = dataResgate;
         this.statusAdocao = statusAdocao;
+        this.acompanhado = false;
         historicoRegistrosMedicos = new ArrayList<>();
     }
 
@@ -112,5 +114,13 @@ public class Animal {
 
     public void setStatusAdocao(StatusAdocao statusAdocao) {
         this.statusAdocao = statusAdocao;
+    }
+
+    public boolean isAcompanhado() {
+        return this.acompanhado;
+    }
+
+    public void setAcompanhado(boolean acompanhado) {
+        this.acompanhado = acompanhado;
     }
 }

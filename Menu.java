@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -182,6 +181,45 @@ public class Menu {
             } catch (NomeNaoLocalizadoException e) {
                 System.out.println(e.getMessage());
                 System.out.println("================================");
+            }
+        }
+    }
+
+    public static void menuAcompanharAnimal(Voluntario voluntario) {
+        int option = 0;
+        do {
+            System.out.println("============== ACOMPANHAMENTO DE ANIMAIS ==============");
+            System.out.println("| 1 - Assumir acompanhamento de um animal             |");
+            System.out.println("| 2 - Visualizar animais sob minha responsabilidade   |");
+            System.out.println("| 0 - Voltar                                          |");
+            System.out.println("=======================================================");
+            System.out.print("| => ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 0 || option > 2);
+
+        if (option == 1) {
+            ArrayList<Animal> desacompanhados = GestaoAnimais.getAnimaisDesacompanhados();
+            if (listaEstaVazia(desacompanhados)) {
+                System.out.println("Não há animais disponíveis sem acompanhamento no momento.");
+                return;
+            }
+            GestaoAnimais.imprimirAnimaisLista(desacompanhados);
+            Animal animal = selecionarAnimalPorId(desacompanhados);
+            if (animal == null) return;
+
+            try {
+                voluntario.acompanharAnimal(animal);
+                System.out.println("Animal vinculado ao seu acompanhamento com sucesso!");
+            } catch (AnimalIndisponivelException e) {
+                System.out.println(e.getMessage());
+            }
+        } else if (option == 2) {
+            ArrayList<Animal> animaisSobMinhaResponsabilidade = voluntario.getAnimaisAcompanhados();
+            if (listaEstaVazia(animaisSobMinhaResponsabilidade)) {
+                System.out.println("Você ainda não está acompanhando nenhum animal.");
+            } else {
+                GestaoAnimais.imprimirAnimaisLista(animaisSobMinhaResponsabilidade);
             }
         }
     }
@@ -650,6 +688,50 @@ public class Menu {
         }
     }
 
+    public static void menuInscreverAtividade(Voluntario voluntario) {
+        try {
+            GestaoAtividades.imprimirTodasAtividades();
+            System.out.print("Informe o ID da atividade: ");
+            String idAtividade = scanner.nextLine();
+            GestaoAtividades.inscreverVoluntarioAtividade(voluntario, idAtividade);
+            System.out.println("Inscrição realizada com sucesso!");
+        } catch (NenhumaAtividadeCadastradaException e) {
+            System.out.println(e.getMessage());
+        } catch (VoluntarioJaInscritoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void menuAgendarAtividade(AdministradorAbrigo administradorAbrigo) {
+        int option = 0;
+        do {
+            System.out.println("====================== AGENDAR ATIVIDADE ======================");
+            System.out.println("| Informe o tipo da atividade:                                |");
+            System.out.println("| Selecione uma opção:                                        |");
+            System.out.println("| 1 - Multirão de Limpeza                                     |");
+            System.out.println("| 2 - Campanha de Vacinação                                   |");
+            System.out.println("| 3 - Feira de Adoção                                         |");
+            System.out.println("| 4 - Evento Beneficente                                      |");
+            System.out.println("================================================================");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } while (option < 1 && option > 4);
+
+        System.out.print("Informe o nome do evento: ");
+        String nome = scanner.nextLine();
+        System.out.println("Informe a data do evento: ");
+        Data dataEvento = lerData();
+        TipoAtividade tipo;
+
+        if (option == 1) tipo = TipoAtividade.MUTIRAO_LIMPEZA;
+        else if (option == 2) tipo = TipoAtividade.CAMPANHA_VACINACAO;
+        else if (option == 3) tipo = TipoAtividade.FEIRA_ADOCAO;
+        else tipo = TipoAtividade.EVENTO_BENEFICENTE;
+
+        GestaoAtividades.cadastrarAtividade(administradorAbrigo, nome, tipo, dataEvento);
+        System.out.printf("Atividade agendada com sucesso para o dia %s.\n", dataEvento);
+    }
+
     public static void menuRegistrarAtendimentoMedico(Veterinario veterinario) {
         int option = 0;
         do {
@@ -939,7 +1021,7 @@ public class Menu {
                     menuFiltrarAnimais(animaisVisiveis);
                     break;
                 case 4:
-                    // a implementar
+                    menuInscreverAtividade(voluntario);
                     break;
                 case 5:
                     voluntario.historicoVazio();
@@ -948,6 +1030,9 @@ public class Menu {
                     for (String participacao : historico) {
                         System.out.println(participacao);
                     }
+                    break;
+                case 6:
+                    menuAcompanharAnimal(voluntario);
                     break;
             }
 
@@ -1083,6 +1168,9 @@ public class Menu {
                     break;
                 case 3:
                     menuGerenciarUsuarios(administradorAbrigo);
+                    break;
+                case 4:
+                    menuAgendarAtividade(administradorAbrigo);
                     break;
             }
 
