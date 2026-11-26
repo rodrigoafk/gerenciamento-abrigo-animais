@@ -63,6 +63,8 @@ public class GestaoAtividades {
         if (usuario instanceof AdministradorAbrigo) {
             Atividade atividade = new Atividade(nome, tipoAtividade, data);
             atividades.add(atividade);
+            String notificacao = String.format("Novo evento cadastrado: %s, do tipo %s, na data %s", atividade.getNome(), atividade.getTipoAtividade(), atividade.getData());
+            GestaoUsuarios.enviarNotificacaoTodosUsuarios(notificacao);
         } else {
             throw new UsuarioNaoPossuiAutorizacaoException("Erro: Somente um administrador do abrigo pode cadastrar novas atividades.");
         }

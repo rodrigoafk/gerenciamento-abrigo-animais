@@ -69,6 +69,8 @@ public class GestaoAdocoes {
             } else {
                 solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.REJEITADA);
             }
+            String notificacao = String.format("Atualização na solicitação de adoção: Sua solicitação de ID %s foi %s!", solicitacaoAdocao.getId(), solicitacaoAdocao.getStatusSolicitacao());
+            GestaoUsuarios.enviarNotificacao(solicitacaoAdocao.getAdotante(), notificacao);
             return;
         }
 

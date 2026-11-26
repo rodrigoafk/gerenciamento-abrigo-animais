@@ -8,11 +8,16 @@ public class AdministradorAbrigo extends Usuario {
 
     @Override
     public void exibirMenu() {
-
+        Menu.exibirMenuAdministradorAbrigo(this);
     }
 
     @Override
     public ArrayList<Animal> getListaAnimaisVisiveis() {
         return GestaoAnimais.getTodosAnimais();
     }
+
+    public void emitiAvisoGeral(String notificacao) {
+        GestaoUsuarios.enviarNotificacaoTodosUsuarios(notificacao);
+    }
+
 }

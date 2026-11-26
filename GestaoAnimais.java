@@ -87,6 +87,8 @@ public class GestaoAnimais {
     public static void cadastrarAnimal(Usuario usuario, Animal animal) {
         if (usuario instanceof AdministradorAbrigo) {
             animais.add(animal);
+            String notificacao = String.format("Novo animal resgatado! %s (%s, porte %s) já está no sistema!", animal.getNome(), animal.getEspecie(), animal.getPorte());
+            GestaoUsuarios.enviarNotificacaoTodosUsuarios(notificacao);
             return;
         }
 

@@ -121,5 +121,39 @@ public class GestaoUsuarios {
         throw new CredenciaisInvalidasException("Erro: Credenciais inválidas. O login falhou");
     }
 
+    public static void enviarNotificacaoTodosUsuarios(String notificacao) {
+        for (Usuario usuario : usuarios) {
+            usuario.receberNotificacao(notificacao);
+        }
+    }
+
+    public static void enviarNotificacao(Usuario usuario, String notificacao) {
+        usuario.receberNotificacao(notificacao);
+    }
+
+    public static void enviarNotificacaoAdministradores(String notificacao) {
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof AdministradorAbrigo) {
+                usuario.receberNotificacao(notificacao);
+            }
+        }
+    }
+
+    public static void enviarNotificacaoVeterinarios(String notificacao) {
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof Veterinario) {
+                usuario.receberNotificacao(notificacao);
+            }
+        }
+    }
+
+    public static void imprimirNotificacoesUsuario(Usuario usuario) {
+        ArrayList<String> notificacoes = usuario.getNotificacoes();
+
+        for (String notificacao : notificacoes) {
+            System.out.println(notificacao + "\n");
+        }
+    }
+
 
 }

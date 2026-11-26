@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
-public abstract class Usuario {
+public abstract class Usuario implements Notificavel {
     private String nome;
     private String cpf;
     private String email;
     private Data dataNascimento;
     private String senha;
+    private ArrayList<String> notificacoes;
 
     public Usuario(String nome, String cpf, String email, Data dataNascimento, String senha) {
         this.nome = nome;
@@ -13,6 +14,7 @@ public abstract class Usuario {
         this.email = email;
         this.dataNascimento = dataNascimento;
         this.senha = senha;
+        this.notificacoes = new ArrayList<>();
     }
 
     public String getNome() {
@@ -61,5 +63,17 @@ public abstract class Usuario {
 
     public String getResumo() {
         return String.format("NOME: %s\nCPF: %s\nEMAIL: %s\n", getNome().toUpperCase(), getCpf(), getEmail());
+    }
+
+    public ArrayList<String> getNotificacoes() {
+        ArrayList<String> copiaNotificacoes = new ArrayList<String>();
+        for (String notificacao : this.notificacoes) {
+            copiaNotificacoes.add(notificacao);
+        }
+        return copiaNotificacoes;
+    }
+
+    public void receberNotificacao(String notificacao) {
+        this.notificacoes.add(notificacao);
     }
 }

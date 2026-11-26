@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Menu {
     public static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Animal> listaFiltroAtual = new ArrayList<>();
+    public static Data DATA_ATUAL;
 
     public static Data lerData() {
         System.out.print("Dia: ");
@@ -955,6 +956,12 @@ public class Menu {
         System.out.println("Seja bem vindo ao Sistema de Gerenciamento de Abrigos e Resgates de Animais!\n" +
                 "Uma plataforma que facilita o controle dos resgates, acompanhamento da saúde dos animais,\n" +
                 " gerenciamento de adoções e comunicação entre os responsáveis pelos abrigos e os voluntários.");
+        System.out.println("Por gentileza, pedimos que você informe a data de hoje.");
+        try {
+            DATA_ATUAL = lerData();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
         int option = 0;
         boolean encerrar = false;
         do {
@@ -1034,6 +1041,9 @@ public class Menu {
                 case 6:
                     menuAcompanharAnimal(voluntario);
                     break;
+                case 7:
+                    GestaoUsuarios.imprimirNotificacoesUsuario(voluntario);
+                    break;
             }
 
         } while (option != 0);
@@ -1085,7 +1095,7 @@ public class Menu {
                     System.out.println(GestaoAnimais.emitirRelatorioSaudeAnimais());
                     break;
                 case 8:
-                    // notificações
+                    GestaoUsuarios.imprimirNotificacoesUsuario(veterinario);
                     break;
 
             }
@@ -1105,12 +1115,13 @@ public class Menu {
                 System.out.println("| 3 - Filtrar animais disponíveis                      |");
                 System.out.println("| 4 - Solicitar adoção                                 |");
                 System.out.println("| 5 - Acompanhar minhas solicitações                   |");
+                System.out.println("| 6 - Visualizar notificações                          |");
                 System.out.println("| 0 - Logout                                           |");
                 System.out.println("========================================================");
                 System.out.print("| => ");
                 option = scanner.nextInt();
                 scanner.nextLine();
-            } while (option < 0 || option > 5);
+            } while (option < 0 || option > 6);
 
             ArrayList<Animal> animaisVisiveis = adotante.getListaAnimaisVisiveis();
 
@@ -1130,7 +1141,9 @@ public class Menu {
                 case 5:
                     GestaoAdocoes.verificarAdocoesCpf(adotante);
                     break;
-
+                case 6:
+                    GestaoUsuarios.imprimirNotificacoesUsuario(adotante);
+                    break;
             }
 
         } while (option != 0);
@@ -1171,6 +1184,17 @@ public class Menu {
                     break;
                 case 4:
                     menuAgendarAtividade(administradorAbrigo);
+                    break;
+                case 5:
+                    // relatórios
+                    break;
+                case 6:
+                    System.out.print("Cadastre um aviso geral: ");
+                    String aviso = scanner.nextLine();
+                    administradorAbrigo.emitiAvisoGeral(aviso);
+                    break;
+                case 7:
+                    GestaoUsuarios.imprimirNotificacoesUsuario(administradorAbrigo);
                     break;
             }
 
