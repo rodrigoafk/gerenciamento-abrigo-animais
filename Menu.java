@@ -934,6 +934,50 @@ public class Menu {
 
     }
 
+    public static void menuEmitirRelatorios(AdministradorAbrigo administradorAbrigo) {
+        int option = -1;
+        do {
+
+            do {
+                System.out.println("==================== EMITIR RELATÓRIOS ====================");
+                System.out.println("| Selecione uma opção:                                    |");
+                System.out.println("| 1 - Quantidade de animais resgatados                    |");
+                System.out.println("| 2 - Quantidade de adoções realizadas                    |");
+                System.out.println("| 3 - Espécies mais resgatadas                            |");
+                System.out.println("| 4 - Taxa de adoção mensal                               |");
+                System.out.println("| 5 - Número de voluntários ativos                        |");
+                System.out.println("| 6 - Relatório de animais em tratamento                  |");
+                System.out.println("| 0 - Voltar                                              |");
+                System.out.println("===========================================================");
+                System.out.print("| => ");
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } while (option < 0 || option > 6);
+
+            switch (option) {
+                case 1:
+                    System.out.println(GestaoAnimais.emitirRelatorioTotalAnimaisResgatados());
+                    break;
+                case 2:
+                    System.out.println(GestaoAdocoes.emitirRelatorioQuantidadeAdocoes());
+                    break;
+                case 3:
+                    System.out.println(GestaoAnimais.emitirRelatorioEspeciesResgatadas());
+                    break;     
+                case 4:
+                    // em breve
+                    break;
+                case 5:
+                    System.out.println(GestaoUsuarios.emitirRelatorioVoluntariosAtivos());
+                    break;   
+                case 6:
+                    System.out.println(GestaoAnimais.emitirRelatorioSaudeAnimais());
+                    break;            
+            }
+        } while (option != 0);
+    }
+
+
     public static Usuario menuLoginUsuario() {
 
         System.out.println("=============== LOGIN ===============");
@@ -1039,7 +1083,7 @@ public class Menu {
                             System.out.println(participacao);
                         }
                     } catch (HistoricoParticipacoesVazioException e) {
-                        
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 6:
@@ -1190,7 +1234,7 @@ public class Menu {
                     menuAgendarAtividade(administradorAbrigo);
                     break;
                 case 5:
-                    // relatórios
+                    menuEmitirRelatorios(administradorAbrigo);
                     break;
                 case 6:
                     System.out.print("Cadastre um aviso geral: ");

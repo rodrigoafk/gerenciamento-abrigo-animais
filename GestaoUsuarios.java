@@ -149,6 +149,10 @@ public class GestaoUsuarios {
 
     public static void imprimirNotificacoesUsuario(Usuario usuario) {
         ArrayList<String> notificacoes = usuario.getNotificacoes();
+        if (notificacoes.isEmpty()) {
+            System.out.println("Ainda não há nenhuma notificação.");
+            return;
+        }
 
         for (String notificacao : notificacoes) {
             System.out.println(notificacao + "\n");
