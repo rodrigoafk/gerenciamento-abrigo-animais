@@ -46,7 +46,7 @@ public class Menu {
     }
 
     public static boolean continuarFiltrando() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("============ FILTROS ============");
             System.out.println("| Selecione uma opção:          |");
@@ -144,7 +144,7 @@ public class Menu {
     }
 
     public static void menuBuscarAnimais(ArrayList<Animal> animaisVisiveis) {
-        int option = 0;
+        int option = -1;
 
         do {
             System.out.println("=========== BUSCA ==============");
@@ -187,7 +187,7 @@ public class Menu {
     }
 
     public static void menuAcompanharAnimal(Voluntario voluntario) {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("============== ACOMPANHAMENTO DE ANIMAIS ==============");
             System.out.println("| 1 - Assumir acompanhamento de um animal             |");
@@ -226,7 +226,7 @@ public class Menu {
     }
 
     public static Especie menuEscolherEspecie() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== ESPÉCIE ====================");
             System.out.println("| Selecione uma opção:                          |");
@@ -247,7 +247,7 @@ public class Menu {
     }
 
     public static int menuCadastrarIdade() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== IDADE ====================");
             System.out.println("| Selecione uma opção:                        |");
@@ -274,7 +274,7 @@ public class Menu {
     }
 
     public static Porte menuEscolherPorte() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== PORTE ====================");
             System.out.println("| Selecione uma opção:                        |");
@@ -293,7 +293,7 @@ public class Menu {
     }
 
     public static EstadoSaude menuEscolherEstadoSaude() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("=============== ESTADO DE SAÚDE ===============");
             System.out.println("| Selecione uma opção:                        |");
@@ -312,7 +312,7 @@ public class Menu {
     }
 
     public static StatusAdocao menuEscolherStatusAdocao() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("================ STATUS DE ADOÇÃO ================");
             System.out.println("| Selecione uma opção:                           |");
@@ -353,7 +353,7 @@ public class Menu {
         do {
 
             continuar = false;
-            int option = 0;
+            int option = -1;
 
             do {
                 System.out.println("=========== FILTROS ===========");
@@ -395,7 +395,7 @@ public class Menu {
         Animal animal = selecionarAnimalPorId(animaisVisiveis);
         if (animal == null) return;
 
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== EDITAR DADOS DO ANIMAL ====================");
             System.out.println("| Selecione uma opção:                                         |");
@@ -435,7 +435,7 @@ public class Menu {
         if (animal == null) return;
 
 
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== REMOVER ANIMAL ====================");
             System.out.println("| Essa ação não poderá ser desfeita, deseja continuar? |");
@@ -461,7 +461,7 @@ public class Menu {
     }
 
     public static void menuGerenciarUsuarios(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== GERENCIAR USUÁRIOS ====================");
             System.out.println("| Selecione uma opção:                                    |");
@@ -506,7 +506,7 @@ public class Menu {
             return;
         }
 
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== REMOVER USUÁRIO ====================");
             System.out.println("| Essa ação não poderá ser desfeita, deseja continuar?  |");
@@ -531,7 +531,7 @@ public class Menu {
     }
 
     public static void menuGerenciarAnimais(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("==================== GERENCIAR ANIMAIS ====================");
             System.out.println("| Selecione uma opção:                                    |");
@@ -577,7 +577,7 @@ public class Menu {
         Animal animal = selecionarAnimalPorId(animaisVisiveis);
         if (animal == null) return;
 
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("=============== ATUALIZAR ESTADO DE SAÚDE ===============");
             System.out.println("| Selecione uma opção:                                  |");
@@ -604,7 +604,7 @@ public class Menu {
     }
 
     public static void menuSolicitarAdocao(ArrayList<Animal> animaisVisiveis, Adotante adotante) {
-        int option = 0;
+        int option = -1;
         Animal animal;
         do {
             animal = selecionarAnimalPorId(animaisVisiveis);
@@ -636,7 +636,7 @@ public class Menu {
     }
 
     public static void menuAvaliarSolicitacaoPorId(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         System.out.print("Informe o ID da solicitação: ");
         String id = scanner.nextLine();
         SolicitacaoAdocao solicitacaoAdocao = GestaoAdocoes.getSolicitacaoPorId(id, administradorAbrigo);
@@ -662,7 +662,7 @@ public class Menu {
     }
 
     public static void menuRegistrarDevolucao(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         System.out.print("Informe o ID da solicitação: ");
         String id = scanner.nextLine();
         SolicitacaoAdocao solicitacaoAdocao = GestaoAdocoes.getSolicitacaoPorId(id, administradorAbrigo);
@@ -704,7 +704,7 @@ public class Menu {
     }
 
     public static void menuAgendarAtividade(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("====================== AGENDAR ATIVIDADE ======================");
             System.out.println("| Informe o tipo da atividade:                                |");
@@ -716,7 +716,7 @@ public class Menu {
             System.out.println("================================================================");
             option = scanner.nextInt();
             scanner.nextLine();
-        } while (option < 1 && option > 4);
+        } while (option < 1 || option > 4);
 
         System.out.print("Informe o nome do evento: ");
         String nome = scanner.nextLine();
@@ -734,7 +734,7 @@ public class Menu {
     }
 
     public static void menuRegistrarAtendimentoMedico(Veterinario veterinario) {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("=============== ATENDIMENTO MÉDICO ===============");
             System.out.println("| Selecione uma opção:                           |");
@@ -818,7 +818,7 @@ public class Menu {
     }
 
     public static void menuGerenciarAdocoes(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         do {
 
             do {
@@ -871,7 +871,7 @@ public class Menu {
     }
 
     public static int menuEscolhaUsuario() {
-        int option = 0;
+        int option = -1;
         do {
             System.out.println("=============== CADASTRO ===============");
             System.out.println("| Selecione uma opção:                 |");
@@ -962,7 +962,7 @@ public class Menu {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
-        int option = 0;
+        int option = -1;
         boolean encerrar = false;
         do {
             do {
@@ -996,7 +996,7 @@ public class Menu {
     }
 
     public static void exibirMenuVoluntario(Voluntario voluntario) {
-        int option = 0;
+        int option = -1;
         do {
 
             do {
@@ -1031,11 +1031,15 @@ public class Menu {
                     menuInscreverAtividade(voluntario);
                     break;
                 case 5:
-                    voluntario.historicoVazio();
-                    System.out.println("Histórico de participações: ");
-                    ArrayList<String> historico = voluntario.getHistoricoParticipacoes();
-                    for (String participacao : historico) {
-                        System.out.println(participacao);
+                    try {
+                        voluntario.historicoVazio();
+                        System.out.println("Histórico de participações: ");
+                        ArrayList<String> historico = voluntario.getHistoricoParticipacoes();
+                        for (String participacao : historico) {
+                            System.out.println(participacao);
+                        }
+                    } catch (HistoricoParticipacoesVazioException e) {
+                        
                     }
                     break;
                 case 6:
@@ -1050,7 +1054,7 @@ public class Menu {
     }
 
     public static void exibirMenuVeterinario(Veterinario veterinario) {
-        int option = 0;
+        int option = -1;
         do {
             do {
                 System.out.println("==================== MENU PRINCIPAL ====================");
@@ -1105,7 +1109,7 @@ public class Menu {
     }
 
     public static void exibirMenuAdotante(Adotante adotante) {
-        int option = 0;
+        int option = -1;
         do {
             do {
                 System.out.println("==================== MENU PRINCIPAL ====================");
@@ -1151,7 +1155,7 @@ public class Menu {
     }
 
     public static void exibirMenuAdministradorAbrigo(AdministradorAbrigo administradorAbrigo) {
-        int option = 0;
+        int option = -1;
         do {
             do {
                 System.out.println("==================== MENU PRINCIPAL ====================");
