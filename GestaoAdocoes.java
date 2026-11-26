@@ -119,8 +119,28 @@ public class GestaoAdocoes {
         for (SolicitacaoAdocao solicitacaoAdocao : solicitacoes) {
             if (solicitacaoAdocao.getAnimal().getId().equals(animal.getId()) && solicitacaoAdocao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE) {
                 solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.REJEITADA);
+                String notificacao = String.format("Atualização na solicitação de adoção: Sua solicitação de ID %s foi %s!", solicitacaoAdocao.getId(), solicitacaoAdocao.getStatusSolicitacao());
+                GestaoUsuarios.enviarNotificacao(solicitacaoAdocao.getAdotante(), notificacao);
             }
         }
     }
 
+    public static String emitirRelatorioTaxaAdocaoMensal(int mes, int ano) {
+        int adocoesMes = 0;
+        int quantidadeTotalAnimais = GestaoAnimais.getTodosAnimais().size();
+        if (quantidadeTotalAnimais == 0) {
+            return "Taxa de adoção nessa data: 0,00%\n";
+        }
+        
+        for (SolicitacaoAdocao solicitacao : solicitacoes) {
+            if (solicitacao.getStatusSolicitacao() == StatusSolicitacao.APROVADA)  {
+                if (solicitacao.getDataSolicitacao().getMes() == mes && solicitacao.getDataSolicitacao().getAno() == ano) {
+                    adocoesMes++;
+                }
+            }
+        }
+        double taxaAdocao = (double) adocoesMes / quantidadeTotalAnimais * 100;
+        return String.format("Taxa de adoção nessa data: %.2f%%\n", taxaAdocao);
     }
+
+}

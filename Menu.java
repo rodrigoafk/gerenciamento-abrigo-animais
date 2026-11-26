@@ -965,7 +965,16 @@ public class Menu {
                     System.out.println(GestaoAnimais.emitirRelatorioEspeciesResgatadas());
                     break;     
                 case 4:
-                    // em breve
+                    System.out.println("Informe o mês: (1 - 12)");
+                    int mes = scanner.nextInt();
+                    System.out.println("Informe o ano: ");
+                    int ano = scanner.nextInt();
+                    scanner.nextLine();
+                    if ((mes < 1 || mes > 12) || (ano < 1926 || ano > 2050)) {
+                        System.out.println("Data inválida.");
+                        break;
+                    }
+                    System.out.println(GestaoAdocoes.emitirRelatorioTaxaAdocaoMensal(mes, ano));
                     break;
                 case 5:
                     System.out.println(GestaoUsuarios.emitirRelatorioVoluntariosAtivos());
@@ -1208,7 +1217,7 @@ public class Menu {
                 System.out.println("| 2 - Gerenciar adoções                                |");
                 System.out.println("| 3 - Gerenciar usuários                               |");
                 System.out.println("| 4 - Agendar atividade                                |");
-                System.out.println("| 5 - Emitir relatórios e estáticas                    |");
+                System.out.println("| 5 - Emitir relatórios e estatísticas                 |");
                 System.out.println("| 6 - Enviar aviso geral                               |");
                 System.out.println("| 7 - Visualizar notificações                          |");
                 System.out.println("| 0 - Logout                                           |");
