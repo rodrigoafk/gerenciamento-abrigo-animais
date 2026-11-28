@@ -57,7 +57,7 @@ public class GestaoAtividades {
             }
 
         }
-        throw new AtividadeNaoEncontradaException("Erro: Não foi encontrada nenuma atividade com o ID informado.");
+        throw new AtividadeNaoEncontradaException("Erro: Não foi encontrada nenhuma atividade com o ID informado.");
     }
 
     public static void inscreverVoluntarioAtividade(Voluntario voluntario, String idAtividade) {

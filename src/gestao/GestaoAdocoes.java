@@ -70,6 +70,9 @@ public class GestaoAdocoes {
         if (solicitacaoAdocao.getStatusSolicitacao() != StatusSolicitacao.PENDENTE) {
             throw new SolicitacaoJaAvaliadaException("Erro: Essa solicitação de adoção já foi avaliada.");
         }
+        if (aprovada && solicitacaoAdocao.getAnimal().getEstadoSaude() == EstadoSaude.EM_TRATAMENTO_CRITICO) {
+            throw new AnimalIndisponivelException("Erro: O animal está em tratamento crítico e não pode ser adotado.");
+        }
 
         if (usuario instanceof AdministradorAbrigo) {
             if (aprovada == true) {

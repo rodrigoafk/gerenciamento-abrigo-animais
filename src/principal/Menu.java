@@ -304,7 +304,7 @@ public class Menu {
         do {
             System.out.println("=============== ESTADO DE SAÚDE ===============");
             System.out.println("| Selecione uma opção:                        |");
-            System.out.println("| 1 - SAÚDAVEL                                |");
+            System.out.println("| 1 - SAUDÁVEL                                |");
             System.out.println("| 2 - EM TRATAMENTO                           |");
             System.out.println("| 3 - EM TRATAMENTO CRÍTICO                   |");
             System.out.println("===============================================");
@@ -346,7 +346,7 @@ public class Menu {
             Porte porte = menuEscolherPorte();
             EstadoSaude estadoSaude = menuEscolherEstadoSaude();
             Data dataResgate = lerData();
-            StatusAdocao statusAdocao = menuEscolherStatusAdocao();
+            StatusAdocao statusAdocao = StatusAdocao.DISPONIVEL;
             Animal animal = new Animal(nome, especie, raca, idade, porte, estadoSaude, dataResgate, statusAdocao);
             GestaoAnimais.cadastrarAnimal(administradorAbrigo, animal);
         } catch (UsuarioNaoPossuiAutorizacaoException e) {
@@ -412,13 +412,12 @@ public class Menu {
             System.out.println("| 1 - Editar NOME                                              |");
             System.out.println("| 2 - Editar RAÇA                                              |");
             System.out.println("| 3 - Editar PORTE                                             |");
-            System.out.println("| 4 - Editar STATUS DE ADOÇÃO                                  |");
             System.out.println("| 0 - Voltar                                                   |");
             System.out.println("================================================================");
             System.out.print("| => ");
             option = scanner.nextInt();
             scanner.nextLine();
-        } while (option < 0 || option > 4);
+        } while (option < 0 || option > 3);
 
         if (option == 0) return;
 
@@ -433,9 +432,6 @@ public class Menu {
         } else if (option == 3) {
             Porte porte = menuEscolherPorte();
             animal.setPorte(porte);
-        } else if (option == 4) {
-            StatusAdocao statusAdocao = menuEscolherStatusAdocao();
-            animal.setStatusAdocao(statusAdocao);
         }
         System.out.println("Dado atualizado com sucesso!");
     }
@@ -591,7 +587,7 @@ public class Menu {
         do {
             System.out.println("=============== ATUALIZAR ESTADO DE SAÚDE ===============");
             System.out.println("| Selecione uma opção:                                  |");
-            System.out.println("| 1 - Atualizar para 'SAÚDAVEL'                         |");
+            System.out.println("| 1 - Atualizar para 'SAUDÁVEL'                         |");
             System.out.println("| 2 - Atualizar para 'EM TRATAMENTO'                    |");
             System.out.println("| 3 - Atualizar para 'EM TRATAMENTO CRÍTICO'            |");
             System.out.println("=========================================================");
@@ -724,7 +720,7 @@ public class Menu {
             System.out.println("====================== AGENDAR ATIVIDADE ======================");
             System.out.println("| Informe o tipo da atividade:                                |");
             System.out.println("| Selecione uma opção:                                        |");
-            System.out.println("| 1 - Multirão de Limpeza                                     |");
+            System.out.println("| 1 - Mutirão de Limpeza                                     |");
             System.out.println("| 2 - Campanha de Vacinação                                   |");
             System.out.println("| 3 - Feira de Adoção                                         |");
             System.out.println("| 4 - Evento Beneficente                                      |");
@@ -888,6 +884,8 @@ public class Menu {
                 System.out.println(e.getMessage());
             } catch (SolicitacaoNaoFoiAprovadaException e) {
                 System.out.println(e.getMessage());
+            } catch (AnimalIndisponivelException e) {
+                System.out.println(e.getMessage());
             } catch (RuntimeException e) {
                 System.out.println("Ocorreu um erro desconhecido.");
             }
@@ -946,7 +944,7 @@ public class Menu {
                     GestaoUsuarios.cadastrarUsuario(adotante);
                     break;
             }
-            System.out.println("Usuário cadastrado com sucessso!\n");
+            System.out.println("Usuário cadastrado com sucesso!\n");
         } catch (CPFInvalidoException e) {
             System.out.println(e.getMessage());
         } catch (UsuarioJaCadastradoException e) {
