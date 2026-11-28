@@ -1,18 +1,13 @@
-# Arquivos compilados do Java e saída do IntelliJ
 out/
 target/
 build/
 *.class
 *.jar
 *.war
-
-# Configurações locais do IntelliJ IDEA
 .idea/
 *.iml
 *.iws
 *.ipr
-
-# Arquivos temporários do sistema operacional e logs
 *.log
 .DS_Store
 Thumbs.db
