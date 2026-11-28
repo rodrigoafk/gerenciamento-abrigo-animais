@@ -1,5 +1,7 @@
 package gestao;
 
+
+
 import entidades.*;
 import enums.EstadoSaude;
 import enums.StatusAdocao;

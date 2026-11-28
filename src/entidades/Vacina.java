@@ -18,7 +18,7 @@ public class Vacina extends RegistroMedico {
 
     @Override
     public String getResumo() {
-        String retorno = String.format("Descrição: %s \nentidades.Data de aplicação: %s\nentidades.Data de validade: %s \nVeterinário responsável: %s\n", getDescricao(), getDataRealizacao(), getDataValidade(), getVeterinarioResponsavel().getNome());
+        String retorno = String.format("Descrição: %s \nData de aplicação: %s\nData de validade: %s \nVeterinário responsável: %s\n", getDescricao(), getDataRealizacao(), getDataValidade(), getVeterinarioResponsavel().getNome());
         return retorno;
     }
 

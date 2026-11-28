@@ -52,7 +52,7 @@ public class Data {
         if (this == obj) return true;
         if (obj == null || !(obj instanceof Data)) return false;
 
-        Data outra = (Data) obj; // converte para entidades.Data para acessar os atributos
+        Data outra = (Data) obj; // converte para Data para acessar os atributos
         return this.dia == outra.dia && this.mes == outra.mes && this.ano == outra.ano;
     }
 

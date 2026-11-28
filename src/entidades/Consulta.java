@@ -18,7 +18,7 @@ public class Consulta extends RegistroMedico {
 
     @Override
     public String getResumo() {
-        String retorno = String.format("Descrição: %s \nentidades.Data da consulta: %s \nVeterinário responsável: %s \nDiagnóstico: %s\n", getDescricao(), getDataRealizacao(), getVeterinarioResponsavel().getNome(), getDiagnostico());
+        String retorno = String.format("Descrição: %s \nData da consulta: %s \nVeterinário responsável: %s \nDiagnóstico: %s\n", getDescricao(), getDataRealizacao(), getVeterinarioResponsavel().getNome(), getDiagnostico());
         return retorno;
     }
 }

@@ -18,7 +18,7 @@ public class Cirurgia extends RegistroMedico {
 
     @Override
     public String getResumo() {
-        String retorno = String.format("Descrição: %s \nentidades.Data da cirurgia: %s \nVeterinário responsável: %s \nCuidados pós-operatório: %s\n", getDescricao(), getDataRealizacao(), getVeterinarioResponsavel().getNome(), getCuidadosPosOperatorio());
+        String retorno = String.format("Descrição: %s \nData da cirurgia: %s \nVeterinário responsável: %s \nCuidados pós-operatório: %s\n", getDescricao(), getDataRealizacao(), getVeterinarioResponsavel().getNome(), getCuidadosPosOperatorio());
         return retorno;
     }
 }

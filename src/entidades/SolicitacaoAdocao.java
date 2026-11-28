@@ -68,7 +68,7 @@ public class SolicitacaoAdocao {
     }
 
     public String getResumo() {
-        String retorno = String.format("ID da solicitação: %s \nNome do adotante: %s \nNome do animal: %s \nID do animal: %s \nentidades.Data de solicitação %s\nStatus da solicitação: %s\n", this.getId(), this.getAdotante().getNome(), this.getAnimal().getNome(), this.getAnimal().getId(), this.getDataSolicitacao(), this.getStatusSolicitacao());
+        String retorno = String.format("ID da solicitação: %s \nNome do adotante: %s \nNome do animal: %s \nID do animal: %s \nData de solicitação %s\nStatus da solicitação: %s\n", this.getId(), this.getAdotante().getNome(), this.getAnimal().getNome(), this.getAnimal().getId(), this.getDataSolicitacao(), this.getStatusSolicitacao());
         if (this.getStatusSolicitacao().equals(StatusSolicitacao.DEVOLVIDA)) {
             retorno = retorno + "Motivo da devolução: " + this.getObservacoes() + "\n";
         }

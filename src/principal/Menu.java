@@ -218,7 +218,7 @@ public class Menu {
 
             try {
                 voluntario.acompanharAnimal(animal);
-                System.out.println("entidades.Animal vinculado ao seu acompanhamento com sucesso!");
+                System.out.println("Animal vinculado ao seu acompanhamento com sucesso!");
             } catch (AnimalIndisponivelException e) {
                 System.out.println(e.getMessage());
             }
@@ -336,22 +336,25 @@ public class Menu {
     }
 
     public static void menuCadastrarAnimal(AdministradorAbrigo administradorAbrigo) {
-        System.out.print("Nome do animal: ");
-        String nome = scanner.nextLine();
-        Especie especie = menuEscolherEspecie();
-        System.out.println("Raça do animal: ");
-        String raca = scanner.nextLine();
-        int idade = menuCadastrarIdade();
-        Porte porte = menuEscolherPorte();
-        EstadoSaude estadoSaude = menuEscolherEstadoSaude();
-        Data dataResgate = lerData();
-        StatusAdocao statusAdocao = menuEscolherStatusAdocao();
-        Animal animal = new Animal(nome, especie, raca, idade, porte, estadoSaude, dataResgate, statusAdocao);
         try {
+            System.out.print("Nome do animal: ");
+            String nome = scanner.nextLine();
+            Especie especie = menuEscolherEspecie();
+            System.out.println("Raça do animal: ");
+            String raca = scanner.nextLine();
+            int idade = menuCadastrarIdade();
+            Porte porte = menuEscolherPorte();
+            EstadoSaude estadoSaude = menuEscolherEstadoSaude();
+            Data dataResgate = lerData();
+            StatusAdocao statusAdocao = menuEscolherStatusAdocao();
+            Animal animal = new Animal(nome, especie, raca, idade, porte, estadoSaude, dataResgate, statusAdocao);
             GestaoAnimais.cadastrarAnimal(administradorAbrigo, animal);
         } catch (UsuarioNaoPossuiAutorizacaoException e) {
             System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public static void menuFiltrarAnimais(ArrayList<Animal> animaisVisiveis) {
@@ -632,12 +635,15 @@ public class Menu {
 
         } while (option != 1);
 
-        System.out.println("entidades.Data da solicitação: ");
-        Data dataSolicitacao = lerData();
+
         try {
+            System.out.println("Data da solicitação: ");
+            Data dataSolicitacao = lerData();
             GestaoAdocoes.solicitarAdocao(adotante, animal, dataSolicitacao);
             System.out.println("Solicitação de adoção registrada com sucesso!");
         } catch (AnimalIndisponivelException e) {
+            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -707,6 +713,8 @@ public class Menu {
             System.out.println(e.getMessage());
         } catch (VoluntarioJaInscritoException e) {
             System.out.println(e.getMessage());
+        } catch (AtividadeNaoEncontradaException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -725,19 +733,29 @@ public class Menu {
             scanner.nextLine();
         } while (option < 1 || option > 4);
 
-        System.out.print("Informe o nome do evento: ");
-        String nome = scanner.nextLine();
-        System.out.println("Informe a data do evento: ");
-        Data dataEvento = lerData();
-        TipoAtividade tipo;
+        try {
 
-        if (option == 1) tipo = TipoAtividade.MUTIRAO_LIMPEZA;
-        else if (option == 2) tipo = TipoAtividade.CAMPANHA_VACINACAO;
-        else if (option == 3) tipo = TipoAtividade.FEIRA_ADOCAO;
-        else tipo = TipoAtividade.EVENTO_BENEFICENTE;
+            System.out.print("Informe o nome do evento: ");
+            String nome = scanner.nextLine();
+            System.out.println("Informe a data do evento: ");
+            Data dataEvento = lerData();
+            TipoAtividade tipo;
 
-        GestaoAtividades.cadastrarAtividade(administradorAbrigo, nome, tipo, dataEvento);
-        System.out.printf("entidades.Atividade agendada com sucesso para o dia %s.\n", dataEvento);
+            if (option == 1) tipo = TipoAtividade.MUTIRAO_LIMPEZA;
+            else if (option == 2) tipo = TipoAtividade.CAMPANHA_VACINACAO;
+            else if (option == 3) tipo = TipoAtividade.FEIRA_ADOCAO;
+            else tipo = TipoAtividade.EVENTO_BENEFICENTE;
+
+            GestaoAtividades.cadastrarAtividade(administradorAbrigo, nome, tipo, dataEvento);
+            System.out.printf("Atividade agendada com sucesso para o dia %s.\n", dataEvento);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro desconhecido. ");
+        }
+
+
     }
 
     public static void menuRegistrarAtendimentoMedico(Veterinario veterinario) {
@@ -761,9 +779,9 @@ public class Menu {
         switch (option) {
             case 1:
                 try {
-                    System.out.println("entidades.Data de Aplicação: ");
+                    System.out.println("Data de Aplicação: ");
                     Data dataRealizacao = lerData();
-                    System.out.println("entidades.Data de Vencimento: ");
+                    System.out.println("Data de Vencimento: ");
                     Data dataVencimento = lerData();
                     System.out.print("Descrição da vacina: ");
                     String descricao = scanner.nextLine();
@@ -777,7 +795,7 @@ public class Menu {
                 break;
             case 2:
                 try {
-                    System.out.println("entidades.Data da entidades.Consulta: ");
+                    System.out.println("Data da Consulta: ");
                     Data dataConsulta = lerData();
                     System.out.print("Descrição: ");
                     String descricao = scanner.nextLine();
@@ -791,7 +809,7 @@ public class Menu {
                 break;
             case 3:
                 try {
-                    System.out.println("entidades.Data da Medicação: ");
+                    System.out.println("Data da Medicação: ");
                     Data dataMedicacao = lerData();
                     System.out.print("Descrição: ");
                     String descricao = scanner.nextLine();
@@ -809,7 +827,7 @@ public class Menu {
 
             case 4:
                 try {
-                    System.out.println("entidades.Data da entidades.Cirurgia: ");
+                    System.out.println("Data da Cirurgia: ");
                     Data dataCirurgia = lerData();
                     System.out.print("Descrição: ");
                     String descricao = scanner.nextLine();
@@ -904,7 +922,7 @@ public class Menu {
             GestaoUsuarios.cpfValido(cpf);
             System.out.print("Informe seu email:");
             String email = scanner.nextLine();
-            System.out.println("entidades.Data de Nascimento: ");
+            System.out.println("Data de Nascimento: ");
             Data dataNascimento = lerData();
             System.out.println("Crie uma senha: ");
             String senha = scanner.nextLine();
@@ -978,7 +996,7 @@ public class Menu {
                     int ano = scanner.nextInt();
                     scanner.nextLine();
                     if ((mes < 1 || mes > 12) || (ano < 1926 || ano > 2050)) {
-                        System.out.println("entidades.Data inválida.");
+                        System.out.println("Data inválida.");
                         break;
                     }
                     System.out.println(GestaoAdocoes.emitirRelatorioTaxaAdocaoMensal(mes, ano));
@@ -992,7 +1010,6 @@ public class Menu {
             }
         } while (option != 0);
     }
-
 
     public static Usuario menuLoginUsuario() {
 

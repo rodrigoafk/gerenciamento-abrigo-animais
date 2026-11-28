@@ -72,12 +72,13 @@ public class GestaoRegistrosMedicos {
             for (RegistroMedico registro : animal.getHistoricoRegistrosMedicos()) {
                 if (registro instanceof Vacina) {
                     int totalValidadeDias = ((Vacina) registro).getValidadeEmDias();
-                    int diferencaDias = diasDataAtual - totalValidadeDias;
+                    int diferencaDias = totalValidadeDias - diasDataAtual;
                     if (diferencaDias < 0) {
-                        String msg = String.format("Alerta: A vacina %s do animal %s está vencida!");
+                        String msg = String.format("Alerta: A vacina %s do animal %s está vencida!", registro.getDescricao(), animal.getNome());
                         GestaoUsuarios.enviarNotificacaoVeterinarios(msg);
                     } else if (diferencaDias <= 3) {
-                        String msg = String.format("Alerta: A validade da vacina %s do animal %s está próxima do fim! Restam 3 dias.");
+                        String msg = String.format("Alerta: A validade da vacina %s do animal %s está próxima do fim! Restam %d dia(s).", registro.getDescricao(), animal.getNome(), diferencaDias);
+                        GestaoUsuarios.enviarNotificacaoVeterinarios(msg);
                     }
                 }
             }

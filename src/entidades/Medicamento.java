@@ -28,7 +28,7 @@ public class Medicamento extends RegistroMedico {
 
     @Override
     public String getResumo() {
-        String retorno = String.format("Descrição: %s \nentidades.Data de início: %s \nVeterinário responsável: %s \nDosagem: %s\n Dias de tratamento: %d\n", getDescricao(), getDataRealizacao(), getVeterinarioResponsavel().getNome(), getDosagem(), getDuracaoDias());
+        String retorno = String.format("Descrição: %s \nData de início: %s \nVeterinário responsável: %s \nDosagem: %s\n Dias de tratamento: %d\n", getDescricao(), getDataRealizacao(), getVeterinarioResponsavel().getNome(), getDosagem(), getDuracaoDias());
         return retorno;
     }
 
